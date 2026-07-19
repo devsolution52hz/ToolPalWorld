@@ -31,6 +31,7 @@ $script:override = @{
  "HandgunBullet"="Đạn Súng Lục"; "AssaultRifleBullet"="Đạn Súng Trường Tấn Công"; "RifleBullet"="Đạn Súng Trường"; "ShotgunBullet"="Đạn Shotgun"; "MagnumBullet"="Đạn Magnum"; "GatlingBullet"="Đạn Gatling"; "MachingunBullet"="Đạn Súng Máy"; "SmallBullet"="Đạn Cỡ Nhỏ"; "LargeBullet"="Đạn Cỡ Lớn"; "RoughBullet"="Đạn Thô"; "ExplosiveBullet"="Đạn Nổ"; "GrenadeBullet"="Đạn Lựu"; "MissileBullet"="Đạn Tên Lửa"; "MeteorBullet"="Đạn Thiên Thạch"; "InkBullet"="Đạn Mực"; "FlamethrowerBullet"="Đạn Súng Phun Lửa"
  "LaserBullet"="Đạn Laser"; "LaserGatlingBullet"="Đạn Gatling Laser"; "ChargeLaserRifleBullet"="Đạn Súng Laser Sạc"; "ElectricArcAssaultRifleBullet"="Đạn Hồ Quang Điện"; "EnergyLauncherBullet"="Đạn Phóng Năng Lượng"; "EnergyShotgunBullet"="Đạn Shotgun Năng Lượng"; "OverheatRifleBullet"="Đạn Súng Quá Nhiệt (Plasma)"; "PalDopingShotBullet"="Đạn Doping Pal"; "SkyAssaultRifleBullet"="Đạn Súng Trường Đảo Trời"; "SkyShotgunBullet"="Đạn Shotgun Đảo Trời"; "SkySubmachineGunBullet"="Đạn Tiểu Liên Đảo Trời"; "SkyGrenadeLauncherBullet"="Đạn Phóng Lựu Đảo Trời"; "SkyHeavyBullet"="Đạn Nặng Đảo Trời"; "SkyLightBullet"="Đạn Nhẹ Đảo Trời"; "WidePenetrateShotgunBullet"="Đạn Shotgun Xuyên Rộng"
  "Arrow"="Mũi Tên"; "Arrow_Fire"="Mũi Tên Lửa"; "Arrow_Poison"="Mũi Tên Độc"; "ReinforcedArrow"="Mũi Tên Gia Cố"; "SFArrow"="Mũi Tên SF"; "SkyBowArrow"="Mũi Tên Cung Đảo Trời"
+ "FragGrenade"="Lựu Đạn (thường)"; "FragGrenade_Fire"="Lựu Đạn Lửa"; "FragGrenade_Ice"="Lựu Đạn Băng"; "FragGrenade_Elec"="Lựu Đạn Sốc Điện (Shock)"; "FragGrenade_Water"="Lựu Đạn Nước"; "FragGrenade_Leaf"="Lựu Đạn Cỏ"; "FragGrenade_Ground"="Lựu Đạn Đất"; "FragGrenade_Dragon"="Lựu Đạn Rồng"; "FragGrenade_Dark"="Lựu Đạn Bóng Tối"; "FragGrenade_Super"="Lựu Đạn Siêu Cấp"; "PalHealingGrenade"="Lựu Đạn Hồi Máu Pal"
  "Bio_Battery"="Bio Battery (Pin Sinh Học)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Môi Ăn Mòn)"; "Bio_Coolant"="Cryogenic Coolant (Chất Làm Mát)"
  "Thermal_Core"="Thermal Core (Lõi Nhiệt)"; "AIcore"="AI Core"; "Computer"="Computer (Máy Tính)"
  "ElectricOrgan"="Electric Organ (Cơ Quan Điện)"; "FireOrgan"="Flame Organ (Cơ Quan Lửa)"; "IceOrgan"="Ice Organ (Cơ Quan Băng)"
@@ -81,7 +82,7 @@ function Get-Category($id) {
     if ($id -match '^WorkSuitability') { return "Sách kỹ năng" }
     if ($id -match '^(Diamond|Ruby|Sapphire|Eemerald)$') { return "Đá quý" }
     if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant') { return "Giáp & Trang bị" }
-    if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple' -and $id -notmatch 'Bullet|Blueprint') { return "Vũ khí" }
+    if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple|Grenade' -and $id -notmatch 'Bullet|Blueprint') { return "Vũ khí" }
     if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|^Bone$|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
     return "Khác"
 }
