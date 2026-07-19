@@ -65,11 +65,26 @@ function Load-Data($root) {
         elseif ($script:names.ContainsKey($id) -and $script:names[$id] -ne "Unknown") { $nm=$script:names[$id] }
         $script:nameOf[$id]=$nm; $has=[bool]$nm
         $disp=if ($nm) { "$nm  [$id]" } else { $id }
-        [void]$script:allItems.Add([PSCustomObject]@{ Id=$id; Name=$nm; Display=$disp; HasName=$has })
+        [void]$script:allItems.Add([PSCustomObject]@{ Id=$id; Name=$nm; Display=$disp; HasName=$has; Cat=(Get-Category $id) })
     }
     $script:ready=$true; return $true
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
+function Get-Category($id) {
+    if ($id -match 'Bullet$' -or $id -match 'Arrow') { return "Đạn & Cung tên" }
+    if ($id -match 'Ingot$') { return "Thỏi kim loại" }
+    if ($id -match 'Ore$' -or $id -match '^(Coal|Sulfur|Quartz|Sand|NightStone|Chromium|Charcoal|StainlessSteel|CrudeOil|Cement|CarbonFiber)$') { return "Quặng & Khoáng" }
+    if ($id -match '^PalAwakening_Material') { return "Nguyên liệu Pal" }
+    if ($id -match '^PalAwakening') { return "Đá Thức Tỉnh" }
+    if ($id -match '^PalUpgradeStone|^PAL_Growth_Stone|^Fruit_|^Rankup_|^AffectionFruit|^Elixir_|^Lotus_') { return "Nâng cấp Pal" }
+    if ($id -match '^PalSphere|^KeySphere') { return "Cầu Pal" }
+    if ($id -match '^WorkSuitability') { return "Sách kỹ năng" }
+    if ($id -match '^(Diamond|Ruby|Sapphire|Eemerald)$') { return "Đá quý" }
+    if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant') { return "Giáp & Trang bị" }
+    if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple' -and $id -notmatch 'Bullet|Blueprint') { return "Vũ khí" }
+    if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|^Bone$|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
+    return "Khác"
+}
 function New-RoundRect($x,$y,$w,$h,$r) {
     $p=New-Object System.Drawing.Drawing2D.GraphicsPath; $d=$r*2
     $p.AddArc($x,$y,$d,$d,180,90); $p.AddArc($x+$w-$d,$y,$d,$d,270,90); $p.AddArc($x+$w-$d,$y+$h-$d,$d,$d,0,90); $p.AddArc($x,$y+$h-$d,$d,$d,90,90); $p.CloseFigure(); return $p
@@ -127,6 +142,10 @@ $lblToggleState=New-Object System.Windows.Forms.Label; $lblToggleState.Location=
 $lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tìm item:"; $lblSearch.Location='18,200'; $lblSearch.AutoSize=$true; $lblSearch.ForeColor=$cDark
 $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'; $txtSearch.Size='300,26'; $txtSearch.BorderStyle='FixedSingle'
 $chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
+$lblCat=New-Object System.Windows.Forms.Label; $lblCat.Text="Danh mục:"; $lblCat.Location='560,200'; $lblCat.AutoSize=$true; $lblCat.ForeColor=$cDark
+$cboCat=New-Object System.Windows.Forms.ComboBox; $cboCat.Location='632,197'; $cboCat.Size='256,26'; $cboCat.DropDownStyle='DropDownList'
+[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Khác"))
+$cboCat.SelectedIndex=0
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
 
@@ -151,13 +170,17 @@ $btnSave.Font=New-Object System.Drawing.Font("Segoe UI",11,[System.Drawing.FontS
 $lblStatus=New-Object System.Windows.Forms.Label; $lblStatus.Location='18,632'; $lblStatus.Size='550,18'
 $lblStatus.Text="Sau khi lưu, RESTART Palworld (thoát hẳn + mở lại) để áp dụng."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
 
-$form.Controls.AddRange(@($header,$lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$toggle,$lblToggleState,$lblSearch,$txtSearch,$chkNamed,$lst,$btnAdd,$btnRem,$grid,$lblSel,$lblStatus,$btnSave))
+$form.Controls.AddRange(@($header,$lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$toggle,$lblToggleState,$lblSearch,$txtSearch,$chkNamed,$lblCat,$cboCat,$lst,$btnAdd,$btnRem,$grid,$lblSel,$lblStatus,$btnSave))
 
 # ===== Logic =====
 function Refresh-Pool {
-    $q=$txtSearch.Text.Trim().ToLower(); $onlyNamed=$chkNamed.Checked
+    $q=$txtSearch.Text.Trim().ToLower(); $onlyNamed=$chkNamed.Checked; $cat=[string]$cboCat.SelectedItem
     $lst.BeginUpdate(); $lst.Items.Clear()
-    foreach ($it in $script:allItems) { if ($onlyNamed -and -not $it.HasName) { continue }; if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) } }
+    foreach ($it in $script:allItems) {
+        if ($onlyNamed -and -not $it.HasName) { continue }
+        if ($cat -and $cat -ne "Tất cả" -and $it.Cat -ne $cat) { continue }
+        if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) }
+    }
     $lst.EndUpdate()
 }
 function Update-Count { $lblSel.Text="Đã chọn: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($script:toggleOn -and $script:ready -and $grid.Rows.Count -lt 7) }
@@ -196,6 +219,7 @@ $lblToggleState.Add_Click({ if ($script:ready) { Set-Toggle (-not $script:toggle
 $btnBrowse.Add_Click({ $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chọn thư mục Palworld"; if (Test-Path $txtPath.Text){$fb.SelectedPath=$txtPath.Text}; if ($fb.ShowDialog() -eq 'OK'){ $txtPath.Text=$fb.SelectedPath; Apply-Path } })
 $btnApplyPath.Add_Click({ Apply-Path })
 $chkNamed.Add_CheckedChanged({ Refresh-Pool })
+$cboCat.Add_SelectedIndexChanged({ Refresh-Pool })
 $txtSearch.Add_TextChanged({ Refresh-Pool })
 $lst.Add_DoubleClick({ $btnAdd.PerformClick() })
 $btnAdd.Add_Click({
