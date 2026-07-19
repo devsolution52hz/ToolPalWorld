@@ -1,4 +1,4 @@
-Add-Type -AssemblyName System.Windows.Forms
+﻿Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # ===== Settings =====
@@ -11,34 +11,34 @@ if (Test-Path $settingsPath) { $s=([System.IO.File]::ReadAllText($settingsPath))
 
 function Get-ModDir($root) { return (Join-Path $root "Pal\Binaries\Win64\ue4ss\Mods\CustomizableLootDrops") }
 
-# ===== Ten tieng Viet co san (tu cuoc tro chuyen) =====
+# ===== Tên tiếng Việt có sẵn =====
 $script:override = @{
- "StainlessSteel"="Hexolite"; "NightStone"="Cat Sao Dem"; "Chromium"="Quang Chromite"
- "WorldTreeHolyWater"="Nuoc Thanh Cay The Gioi"; "Wood_WorldTree"="Mythical Wood (Go Than Thoai)"
- "Wood_Fine"="Hardwood (Go Cung)"; "Wood_Ancient"="Ancient Bark (Vo Cay Co)"; "Wood"="Go"
- "AncientParts2"="Ancient Civilization Core (Loi Van Minh Co)"; "AncientParts3"="Ancient Pal Manuscript (Ban Thao Pal Co)"
- "PalCrystal_Ex"="Ancient Civilization Parts (Manh Van Minh Co)"
- "WorldTreeRelic_01"="Di Vat World Tree bac 1"; "WorldTreeRelic_02"="Di Vat World Tree bac 2"; "WorldTreeRelic_03"="Di Vat World Tree bac 3"; "WorldTreeRelic_04"="Di Vat World Tree bac 4"; "WorldTreeRelic_05"="Glistening Ancient Relic (Di Vat Lap Lanh)"
- "PalUpgradeStone"="Hon Pal Nho"; "PalUpgradeStone2"="Hon Pal Vua"; "PalUpgradeStone3"="Hon Pal Lon"; "PalUpgradeStone4"="Hon Pal Khong Lo"
- "Rankup_1"="Starfruit *1"; "Rankup_2"="Starfruit *2"; "Rankup_3"="Starfruit *3"; "Rankup_4"="Starfruit *4"; "Rankup_Arbitrary"="Ripe Starfruit (nang bat ky +1)"
- "Fruit_hp_01"="Life Fruit (tang Mau)"; "Fruit_attack_01"="Attack Fruit (tang Tan cong)"; "Fruit__defense_01"="Defense Fruit (tang Phong thu)"; "AffectionFruit_01"="Affection Fruit (than thiet)"; "AffectionFruit_02"="Affection Fruit II"
- "IronIngot"="Thoi Sat"; "CopperIngot"="Thoi Dong"; "ManganeseIngot"="Thoi Mangan"; "StealIngot"="Thoi Thep"; "SkyislandIngot"="Thoi Dao Troi"; "WorldTreeIngot"="Thoi Cay The Gioi"
- "IronOre"="Quang Sat"; "CopperOre"="Quang Dong"; "ManganeseOre"="Quang Mangan"; "SkyIslandOre"="Quang Dao Troi"; "WorldTreeOre"="Quang Cay The Gioi"
- "Coal"="Than"; "Sulfur"="Luu Huynh"; "Quartz"="Thach Anh"; "CarbonFiber"="Soi Carbon"; "Cement"="Xi Mang"; "Charcoal"="Than Cui"
- "Gunpowder2"="Thuoc Sung (den)"; "Gunpowder"="Thuoc Sung (loai thap)"
- "Bio_Battery"="Bio Battery (Pin Sinh Hoc)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Moi An Mon)"; "Bio_Coolant"="Cryogenic Coolant (Chat Lam Mat)"
- "Thermal_Core"="Thermal Core (Loi Nhiet)"; "AIcore"="AI Core"; "Computer"="Computer (May Tinh)"
- "ElectricOrgan"="Electric Organ (Co Quan Dien)"; "FireOrgan"="Flame Organ (Co Quan Lua)"; "IceOrgan"="Ice Organ (Co Quan Bang)"
- "UniqueMaterial_Mothman"="Explosion-Resistant Fiber (tu Silvance)"; "UniqueMaterial_FlowerPrince"="Toxin Filtering Membrane (tu Dandilord)"
- "Venom"="Venom Gland (Tuyen Doc)"; "PalDarkParts"="Dark Fragment (Manh Bong Toi)"; "MeteorDrop"="Meteorite Fragment (Manh Thien Thach)"
- "CrudeOil"="Crude Oil (Dau Tho)"; "Bone"="Bone (Xuong)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thu"
- "PalItem_ToSell_04"="Precious Claw (Mong Vuot Quy)"; "PalItem_ToSell_05"="Precious Plume (Long Vu Quy)"
- "PalGenderReverse"="Pal Reverser (doi gioi tinh)"; "WingGlider_Fuel"="Wing Cell (nhien lieu Wing Pack)"; "BeamLauncherBullet"="Beam Launcher Ammo (dan Beam)"
- "Eemerald"="Emerald (Ngoc Luc Bao)"; "Diamond"="Diamond (Kim Cuong)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vang (Tien)"
- "WorkSuitability_AddTicket_MonsterFarm"="Sach Ranching (nuoi Pal)"; "WorkSuitability_AddTicket_Watering"="Sach Watering (tuoi nuoc)"; "WorkSuitability_AddTicket_Seeding"="Sach Planting (trong cay)"; "WorkSuitability_AddTicket_Collection"="Sach Gathering (thu thap)"; "WorkSuitability_AddTicket_Deforest"="Sach Lumbering (don go)"; "WorkSuitability_AddTicket_Mining"="Sach Mining (khai thac)"; "WorkSuitability_AddTicket_EmitFlame"="Sach Kindling (dot lua)"; "WorkSuitability_AddTicket_Handcraft"="Sach Handiwork (thu cong)"; "WorkSuitability_AddTicket_Cool"="Sach Cooling (lam mat)"; "WorkSuitability_AddTicket_ProductMedicine"="Sach Medicine (che thuoc)"; "WorkSuitability_AddTicket_Transport"="Sach Transporting (van chuyen)"; "WorkSuitability_AddTicket_GenerateElectricity"="Sach Generating Electricity (phat dien)"
+ "StainlessSteel"="Hexolite"; "NightStone"="Cát Sao Đêm"; "Chromium"="Quặng Chromite"
+ "WorldTreeHolyWater"="Nước Thánh Cây Thế Giới"; "Wood_WorldTree"="Mythical Wood (Gỗ Thần Thoại)"
+ "Wood_Fine"="Hardwood (Gỗ Cứng)"; "Wood_Ancient"="Ancient Bark (Vỏ Cây Cổ)"; "Wood"="Gỗ"
+ "AncientParts2"="Ancient Civilization Core (Lõi Văn Minh Cổ)"; "AncientParts3"="Ancient Pal Manuscript (Bản Thảo Pal Cổ)"
+ "PalCrystal_Ex"="Ancient Civilization Parts (Mảnh Văn Minh Cổ)"
+ "WorldTreeRelic_01"="Di Vật World Tree bậc 1"; "WorldTreeRelic_02"="Di Vật World Tree bậc 2"; "WorldTreeRelic_03"="Di Vật World Tree bậc 3"; "WorldTreeRelic_04"="Di Vật World Tree bậc 4"; "WorldTreeRelic_05"="Glistening Ancient Relic (Di Vật Lấp Lánh)"
+ "PalUpgradeStone"="Hồn Pal Nhỏ"; "PalUpgradeStone2"="Hồn Pal Vừa"; "PalUpgradeStone3"="Hồn Pal Lớn"; "PalUpgradeStone4"="Hồn Pal Khổng Lồ"
+ "Rankup_1"="Starfruit ☆1"; "Rankup_2"="Starfruit ☆2"; "Rankup_3"="Starfruit ☆3"; "Rankup_4"="Starfruit ☆4"; "Rankup_Arbitrary"="Ripe Starfruit (nâng bất kỳ +1)"
+ "Fruit_hp_01"="Life Fruit (tăng Máu)"; "Fruit_attack_01"="Attack Fruit (tăng Tấn công)"; "Fruit__defense_01"="Defense Fruit (tăng Phòng thủ)"; "AffectionFruit_01"="Affection Fruit (thân thiết)"; "AffectionFruit_02"="Affection Fruit II"
+ "IronIngot"="Thỏi Sắt"; "CopperIngot"="Thỏi Đồng"; "ManganeseIngot"="Thỏi Mangan"; "StealIngot"="Thỏi Thép"; "SkyislandIngot"="Thỏi Đảo Trời"; "WorldTreeIngot"="Thỏi Cây Thế Giới"
+ "IronOre"="Quặng Sắt"; "CopperOre"="Quặng Đồng"; "ManganeseOre"="Quặng Mangan"; "SkyIslandOre"="Quặng Đảo Trời"; "WorldTreeOre"="Quặng Cây Thế Giới"
+ "Coal"="Than"; "Sulfur"="Lưu Huỳnh"; "Quartz"="Thạch Anh"; "CarbonFiber"="Sợi Carbon"; "Cement"="Xi Măng"; "Charcoal"="Than Củi"
+ "Gunpowder2"="Thuốc Súng (đen)"; "Gunpowder"="Thuốc Súng (loại thấp)"
+ "Bio_Battery"="Bio Battery (Pin Sinh Học)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Môi Ăn Mòn)"; "Bio_Coolant"="Cryogenic Coolant (Chất Làm Mát)"
+ "Thermal_Core"="Thermal Core (Lõi Nhiệt)"; "AIcore"="AI Core"; "Computer"="Computer (Máy Tính)"
+ "ElectricOrgan"="Electric Organ (Cơ Quan Điện)"; "FireOrgan"="Flame Organ (Cơ Quan Lửa)"; "IceOrgan"="Ice Organ (Cơ Quan Băng)"
+ "UniqueMaterial_Mothman"="Explosion-Resistant Fiber (từ Silvance)"; "UniqueMaterial_FlowerPrince"="Toxin Filtering Membrane (từ Dandilord)"
+ "Venom"="Venom Gland (Tuyến Độc)"; "PalDarkParts"="Dark Fragment (Mảnh Bóng Tối)"; "MeteorDrop"="Meteorite Fragment (Mảnh Thiên Thạch)"
+ "CrudeOil"="Crude Oil (Dầu Thô)"; "Bone"="Bone (Xương)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thú"
+ "PalItem_ToSell_04"="Precious Claw (Móng Vuốt Quý)"; "PalItem_ToSell_05"="Precious Plume (Lông Vũ Quý)"
+ "PalGenderReverse"="Pal Reverser (đổi giới tính)"; "WingGlider_Fuel"="Wing Cell (nhiên liệu Wing Pack)"; "BeamLauncherBullet"="Beam Launcher Ammo (đạn Beam)"
+ "Eemerald"="Emerald (Ngọc Lục Bảo)"; "Diamond"="Diamond (Kim Cương)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vàng (Tiền)"
+ "WorkSuitability_AddTicket_MonsterFarm"="Sách Ranching (nuôi Pal)"; "WorkSuitability_AddTicket_Watering"="Sách Watering (tưới nước)"; "WorkSuitability_AddTicket_Seeding"="Sách Planting (trồng cây)"; "WorkSuitability_AddTicket_Collection"="Sách Gathering (thu thập)"; "WorkSuitability_AddTicket_Deforest"="Sách Lumbering (đốn gỗ)"; "WorkSuitability_AddTicket_Mining"="Sách Mining (khai thác)"; "WorkSuitability_AddTicket_EmitFlame"="Sách Kindling (đốt lửa)"; "WorkSuitability_AddTicket_Handcraft"="Sách Handiwork (thủ công)"; "WorkSuitability_AddTicket_Cool"="Sách Cooling (làm mát)"; "WorkSuitability_AddTicket_ProductMedicine"="Sách Medicine (chế thuốc)"; "WorkSuitability_AddTicket_Transport"="Sách Transporting (vận chuyển)"; "WorkSuitability_AddTicket_GenerateElectricity"="Sách Generating Electricity (phát điện)"
  "PalSphere"="Pal Sphere"; "PalSphere_Mega"="Mega Sphere"; "PalSphere_Giga"="Giga Sphere"; "PalSphere_Master"="Master Sphere"; "PalSphere_Legend"="Legendary Sphere"; "PalSphere_Ultimate"="Ultimate Sphere"; "PalSphere_Ancient_1"="Ancient Sphere I"; "PalSphere_Ancient_2"="Ancient Sphere II"
- "PAL_Growth_Stone_S"="Da Tang Truong Pal S"; "PAL_Growth_Stone_M"="Da Tang Truong Pal M"; "PAL_Growth_Stone_L"="Da Tang Truong Pal L"; "PAL_Growth_Stone_XL"="Da Tang Truong Pal XL"
- "AncientTechnologyBook_G1"="Ancient Tech Manual (diem KT co)"; "TechnologyBook_G1"="Technology Manual (diem KT)"; "TechnologyBook_G2"="Technology Manual II"; "TechnologyBook_G3"="Technology Manual III"
+ "PAL_Growth_Stone_S"="Đá Tăng Trưởng Pal S"; "PAL_Growth_Stone_M"="Đá Tăng Trưởng Pal M"; "PAL_Growth_Stone_L"="Đá Tăng Trưởng Pal L"; "PAL_Growth_Stone_XL"="Đá Tăng Trưởng Pal XL"
+ "AncientTechnologyBook_G1"="Ancient Tech Manual (điểm KT cổ)"; "TechnologyBook_G1"="Technology Manual (điểm kỹ thuật)"; "TechnologyBook_G2"="Technology Manual II"; "TechnologyBook_G3"="Technology Manual III"
 }
 
 $script:allItems=New-Object System.Collections.ArrayList
@@ -72,39 +72,39 @@ $form=New-Object System.Windows.Forms.Form
 $form.Text="Palworld Loot Tool - by Claude"; $form.Size=New-Object System.Drawing.Size(900,690)
 $form.StartPosition="CenterScreen"; $form.Font=New-Object System.Drawing.Font("Segoe UI",9)
 
-$lblPath=New-Object System.Windows.Forms.Label; $lblPath.Text="Duong dan game (thu muc chua Palworld.exe):"; $lblPath.Location='12,12'; $lblPath.AutoSize=$true
+$lblPath=New-Object System.Windows.Forms.Label; $lblPath.Text="Đường dẫn game (thư mục chứa Palworld.exe):"; $lblPath.Location='12,12'; $lblPath.AutoSize=$true
 $txtPath=New-Object System.Windows.Forms.TextBox; $txtPath.Location='12,32'; $txtPath.Size='640,24'; $txtPath.Text=$script:gameRoot
 $btnBrowse=New-Object System.Windows.Forms.Button; $btnBrowse.Text="..."; $btnBrowse.Location='658,31'; $btnBrowse.Size='34,26'
-$btnApplyPath=New-Object System.Windows.Forms.Button; $btnApplyPath.Text="Ap dung"; $btnApplyPath.Location='700,31'; $btnApplyPath.Size='90,26'
+$btnApplyPath=New-Object System.Windows.Forms.Button; $btnApplyPath.Text="Áp dụng"; $btnApplyPath.Location='700,31'; $btnApplyPath.Size='90,26'
 $lblPathStat=New-Object System.Windows.Forms.Label; $lblPathStat.Location='12,58'; $lblPathStat.Size='790,18'
 
-$chkOn=New-Object System.Windows.Forms.CheckBox; $chkOn.Text="BAT MOD (ON)   -   bo chon = OFF (game farm binh thuong)"; $chkOn.Location='12,80'; $chkOn.AutoSize=$true; $chkOn.Checked=$true
+$chkOn=New-Object System.Windows.Forms.CheckBox; $chkOn.Text="BẬT MOD (ON)   -   bỏ chọn = OFF (game farm bình thường)"; $chkOn.Location='12,80'; $chkOn.AutoSize=$true; $chkOn.Checked=$true
 $chkOn.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold); $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67)
 
-$lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tim item:"; $lblSearch.Location='12,116'; $lblSearch.AutoSize=$true
+$lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tìm item:"; $lblSearch.Location='12,116'; $lblSearch.AutoSize=$true
 $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='80,113'; $txtSearch.Size='300,24'
-$chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chi hien item co ten"; $chkNamed.Location='392,115'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true
+$chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='392,115'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='12,144'; $lst.Size='440,410'
 
-$btnAdd=New-Object System.Windows.Forms.Button; $btnAdd.Text="Them ->"; $btnAdd.Location='462,230'; $btnAdd.Size='90,34'
-$btnRem=New-Object System.Windows.Forms.Button; $btnRem.Text="<- Xoa"; $btnRem.Location='462,272'; $btnRem.Size='90,34'
+$btnAdd=New-Object System.Windows.Forms.Button; $btnAdd.Text="Thêm →"; $btnAdd.Location='462,230'; $btnAdd.Size='90,34'
+$btnRem=New-Object System.Windows.Forms.Button; $btnRem.Text="← Xóa"; $btnRem.Location='462,272'; $btnRem.Size='90,34'
 
 $grid=New-Object System.Windows.Forms.DataGridView; $grid.Location='562,144'; $grid.Size='320,360'
 $grid.AllowUserToAddRows=$false; $grid.RowHeadersVisible=$false; $grid.SelectionMode='FullRowSelect'; $grid.AutoSizeColumnsMode='None'
-$colName=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colName.HeaderText="Ten"; $colName.ReadOnly=$true; $colName.Width=185
-$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colQty.HeaderText="So luong"; $colQty.Width=95
+$colName=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colName.HeaderText="Tên"; $colName.ReadOnly=$true; $colName.Width=185
+$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colQty.HeaderText="Số lượng"; $colQty.Width=95
 $colId=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colId.HeaderText="Id"; $colId.Visible=$false
 $grid.Columns.AddRange($colName,$colQty,$colId)
 
-$lblSel=New-Object System.Windows.Forms.Label; $lblSel.Text="Da chon: 0/7"; $lblSel.Location='562,510'; $lblSel.AutoSize=$true
+$lblSel=New-Object System.Windows.Forms.Label; $lblSel.Text="Đã chọn: 0/7"; $lblSel.Location='562,510'; $lblSel.AutoSize=$true
 $lblSel.Font=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
 
-$btnSave=New-Object System.Windows.Forms.Button; $btnSave.Text="LUU & AP DUNG"; $btnSave.Location='562,534'; $btnSave.Size='320,42'
+$btnSave=New-Object System.Windows.Forms.Button; $btnSave.Text="LƯU & ÁP DỤNG"; $btnSave.Location='562,534'; $btnSave.Size='320,42'
 $btnSave.BackColor=[System.Drawing.Color]::FromArgb(46,160,67); $btnSave.ForeColor='White'; $btnSave.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
 
 $lblStatus=New-Object System.Windows.Forms.Label; $lblStatus.Location='12,566'; $lblStatus.Size='540,70'
-$lblStatus.Text="Bat ON de chon item, hoac bo chon (OFF) roi LUU de tro ve farm binh thuong. Sau khi luu, RESTART Palworld."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
+$lblStatus.Text="Bật ON để chọn item, hoặc bỏ chọn (OFF) rồi LƯU để trở về farm bình thường. Sau khi lưu, RESTART Palworld."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
 
 $form.Controls.AddRange(@($lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$chkOn,$lblSearch,$txtSearch,$chkNamed,$lst,$btnAdd,$btnRem,$grid,$lblSel,$btnSave,$lblStatus))
 
@@ -118,12 +118,12 @@ function Refresh-Pool {
     }
     $lst.EndUpdate()
 }
-function Update-Count { $lblSel.Text="Da chon: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($chkOn.Checked -and $script:ready -and $grid.Rows.Count -lt 7) }
+function Update-Count { $lblSel.Text="Đã chọn: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($chkOn.Checked -and $script:ready -and $grid.Rows.Count -lt 7) }
 function Set-ItemEnabled {
     $on=$chkOn.Checked -and $script:ready
     $txtSearch.Enabled=$on; $lst.Enabled=$on; $btnRem.Enabled=$on; $grid.Enabled=$on; $chkNamed.Enabled=$on
-    if ($chkOn.Checked) { $chkOn.Text="BAT MOD (ON)   -   dang cho chon item"; $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67) }
-    else { $chkOn.Text="MOD DANG OFF   -   tich vao de BAT (ON)"; $chkOn.ForeColor=[System.Drawing.Color]::Firebrick }
+    if ($chkOn.Checked) { $chkOn.Text="BẬT MOD (ON)   -   đang cho chọn item"; $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67) }
+    else { $chkOn.Text="MOD ĐANG OFF   -   tích vào để BẬT (ON)"; $chkOn.ForeColor=[System.Drawing.Color]::Firebrick }
     Update-Count
 }
 function Find-ItemByDisplay($disp){ foreach($it in $script:allItems){ if($it.Display -eq $disp){return $it} }; return $null }
@@ -143,12 +143,12 @@ function Write-Config($dropsBody) {
 }
 function Apply-Path {
     $root=$txtPath.Text.Trim().TrimEnd('\')
-    if ($root -eq "") { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Duong dan dang TRONG."; [System.Windows.Forms.MessageBox]::Show("Ban chua nhap duong dan game!","Thieu duong dan",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return }
-    if (Load-Data $root) { $script:gameRoot=$root; try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}; $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item). Da luu duong dan."; Refresh-Pool; Load-Current; Set-ItemEnabled }
-    else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="SAI duong dan - khong thay mod o day."; [System.Windows.Forms.MessageBox]::Show("Duong dan khong dung! Khong tim thay mod CustomizableLootDrops trong:`n$root`n`nHay chon dung thu muc goc Palworld.","Sai duong dan",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled }
+    if ($root -eq "") { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Đường dẫn đang TRỐNG."; [System.Windows.Forms.MessageBox]::Show("Bạn chưa nhập đường dẫn game!","Thiếu đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return }
+    if (Load-Data $root) { $script:gameRoot=$root; try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}; $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - đã nhận diện mod ($($script:allItems.Count) item). Đã lưu đường dẫn."; Refresh-Pool; Load-Current; Set-ItemEnabled }
+    else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="SAI đường dẫn - không thấy mod ở đây."; [System.Windows.Forms.MessageBox]::Show("Đường dẫn không đúng! Không tìm thấy mod CustomizableLootDrops trong:`n$root`n`nHãy chọn đúng thư mục gốc Palworld.","Sai đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled }
 }
 
-$btnBrowse.Add_Click({ $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chon thu muc Palworld"; if (Test-Path $txtPath.Text){$fb.SelectedPath=$txtPath.Text}; if ($fb.ShowDialog() -eq 'OK'){ $txtPath.Text=$fb.SelectedPath; Apply-Path } })
+$btnBrowse.Add_Click({ $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chọn thư mục Palworld"; if (Test-Path $txtPath.Text){$fb.SelectedPath=$txtPath.Text}; if ($fb.ShowDialog() -eq 'OK'){ $txtPath.Text=$fb.SelectedPath; Apply-Path } })
 $btnApplyPath.Add_Click({ Apply-Path })
 $chkOn.Add_CheckedChanged({ Set-ItemEnabled })
 $chkNamed.Add_CheckedChanged({ Refresh-Pool })
@@ -156,7 +156,7 @@ $txtSearch.Add_TextChanged({ Refresh-Pool })
 $lst.Add_DoubleClick({ $btnAdd.PerformClick() })
 $btnAdd.Add_Click({
     if ($null -eq $lst.SelectedItem) { return }
-    if ($grid.Rows.Count -ge 7) { [System.Windows.Forms.MessageBox]::Show("Toi da 7 item thoi!","",0,48)|Out-Null; return }
+    if ($grid.Rows.Count -ge 7) { [System.Windows.Forms.MessageBox]::Show("Tối đa 7 item thôi!","",0,48)|Out-Null; return }
     $it=Find-ItemByDisplay $lst.SelectedItem; if ($null -eq $it) { return }
     foreach ($r in $grid.Rows) { if ($r.Cells[2].Value -eq $it.Id) { return } }
     $dispName=if($it.Name){$it.Name}else{$it.Id}
@@ -164,25 +164,25 @@ $btnAdd.Add_Click({
 })
 $btnRem.Add_Click({ if ($grid.SelectedRows.Count -gt 0) { $grid.Rows.Remove($grid.SelectedRows[0]); Update-Count } })
 $btnSave.Add_Click({
-    if (-not $script:ready) { [System.Windows.Forms.MessageBox]::Show("Chua chon dung duong dan game (hoac de trong)! Hay bam 'Ap dung' truoc.","Thieu duong dan",0,48)|Out-Null; return }
+    if (-not $script:ready) { [System.Windows.Forms.MessageBox]::Show("Chưa chọn đúng đường dẫn game (hoặc để trống)! Hãy bấm 'Áp dụng' trước.","Thiếu đường dẫn",0,48)|Out-Null; return }
     if ($chkOn.Checked) {
         $grid.EndEdit()
-        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod ON nhung chua chon item nao.","Chua chon item",0,48)|Out-Null; return }
+        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod đang ON nhưng chưa chọn item nào.","Chưa chọn item",0,48)|Out-Null; return }
         $drops=@()
         foreach ($r in $grid.Rows) {
             $id=[string]$r.Cells[2].Value; $qtyRaw=[string]$r.Cells[1].Value; $qty=0
-            if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("So luong khong hop le: $($r.Cells[0].Value)","Loi",0,48)|Out-Null; return }
+            if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("Số lượng không hợp lệ: $($r.Cells[0].Value)","Lỗi",0,48)|Out-Null; return }
             if ($qty -gt 99999) { $qty=99999 }
             $drops+=('    { "ItemId": "'+$id+'", "Chance": 100.0, "MinAmount": '+$qty+', "MaxAmount": '+$qty+' }')
         }
-        try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblStatus.Text="MOD ON - da luu ($($grid.Rows.Count) item). RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod ON - da luu $($grid.Rows.Count) item!`n`nRESTART Palworld de ap dung.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Loi: $($_.Exception.Message)","Loi",0,16)|Out-Null }
+        try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblStatus.Text="MOD ON - đã lưu ($($grid.Rows.Count) item). RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod ON - đã lưu $($grid.Rows.Count) item!`n`nRESTART Palworld để áp dụng.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
     } else {
-        try { Write-Config ""; $lblStatus.ForeColor=[System.Drawing.Color]::Firebrick; $lblStatus.Text="MOD OFF - game farm binh thuong. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod OFF - game farm BINH THUONG.`n`nRESTART Palworld de ap dung.","Da tat mod",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Loi: $($_.Exception.Message)","Loi",0,16)|Out-Null }
+        try { Write-Config ""; $lblStatus.ForeColor=[System.Drawing.Color]::Firebrick; $lblStatus.Text="MOD OFF - game farm bình thường. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod OFF - game farm BÌNH THƯỜNG.`n`nRESTART Palworld để áp dụng.","Đã tắt mod",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
     }
 })
 
-# ===== Khoi tao =====
-if (Load-Data $script:gameRoot) { $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item)."; Refresh-Pool; Load-Current }
-else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Chua thay mod o duong dan mac dinh. Dan duong dan roi bam 'Ap dung'." }
+# ===== Khởi tạo =====
+if (Load-Data $script:gameRoot) { $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - đã nhận diện mod ($($script:allItems.Count) item)."; Refresh-Pool; Load-Current }
+else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Chưa thấy mod ở đường dẫn mặc định. Dán đường dẫn rồi bấm 'Áp dụng'." }
 Set-ItemEnabled
 [void]$form.ShowDialog()
