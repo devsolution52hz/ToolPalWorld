@@ -1,131 +1,127 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-# ===== Settings (luu duong dan game) =====
+# ===== Settings =====
 $settingsDir = Join-Path $env:LOCALAPPDATA "PalworldLootTool"
 if (-not (Test-Path $settingsDir)) { New-Item -ItemType Directory -Force $settingsDir | Out-Null }
 $settingsPath = Join-Path $settingsDir "gamepath.txt"
 $defaultRoot  = "D:\Steam\steamapps\common\Palworld"
-
 $script:gameRoot = $defaultRoot
-if (Test-Path $settingsPath) {
-    $saved = ([System.IO.File]::ReadAllText($settingsPath)).Trim()
-    if ($saved) { $script:gameRoot = $saved }
-}
+if (Test-Path $settingsPath) { $s=([System.IO.File]::ReadAllText($settingsPath)).Trim(); if ($s){$script:gameRoot=$s} }
 
 function Get-ModDir($root) { return (Join-Path $root "Pal\Binaries\Win64\ue4ss\Mods\CustomizableLootDrops") }
 
-$script:allItems   = New-Object System.Collections.ArrayList
-$script:names      = @{}
-$script:configPath = ""
-$script:ready      = $false
-
-function Load-Data($root) {
-    $modDir = Get-ModDir $root
-    $validPath = Join-Path $modDir "Scripts\GeneratedItemIDs.lua"
-    $namesPath = Join-Path $modDir "ItemIDs.txt"
-    $script:configPath = Join-Path $modDir "config.jsonc"
-    $script:allItems.Clear(); $script:names = @{}
-    if (-not (Test-Path $validPath)) { $script:ready = $false; return $false }
-    $valid = @{}
-    foreach ($line in [System.IO.File]::ReadAllLines($validPath)) {
-        if ($line -match '\["([^"]+)"\]\s*=\s*true') { $valid[$matches[1]] = $true }
-    }
-    if (Test-Path $namesPath) {
-        foreach ($line in [System.IO.File]::ReadAllLines($namesPath)) {
-            if ($line -match '^([A-Za-z0-9_]+)\s*=\s*(.+?)\s*$') { $script:names[$matches[1]] = $matches[2] }
-        }
-    }
-    foreach ($id in ($valid.Keys | Sort-Object)) {
-        $nm = ""
-        if ($script:names.ContainsKey($id) -and $script:names[$id] -ne "Unknown") { $nm = $script:names[$id] }
-        $disp = if ($nm) { "$nm  [$id]" } else { $id }
-        [void]$script:allItems.Add([PSCustomObject]@{ Id=$id; Name=$nm; Display=$disp })
-    }
-    $script:ready = $true; return $true
+# ===== Ten tieng Viet co san (tu cuoc tro chuyen) =====
+$script:override = @{
+ "StainlessSteel"="Hexolite"; "NightStone"="Cat Sao Dem"; "Chromium"="Quang Chromite"
+ "WorldTreeHolyWater"="Nuoc Thanh Cay The Gioi"; "Wood_WorldTree"="Mythical Wood (Go Than Thoai)"
+ "Wood_Fine"="Hardwood (Go Cung)"; "Wood_Ancient"="Ancient Bark (Vo Cay Co)"; "Wood"="Go"
+ "AncientParts2"="Ancient Civilization Core (Loi Van Minh Co)"; "AncientParts3"="Ancient Pal Manuscript (Ban Thao Pal Co)"
+ "PalCrystal_Ex"="Ancient Civilization Parts (Manh Van Minh Co)"
+ "WorldTreeRelic_01"="Di Vat World Tree bac 1"; "WorldTreeRelic_02"="Di Vat World Tree bac 2"; "WorldTreeRelic_03"="Di Vat World Tree bac 3"; "WorldTreeRelic_04"="Di Vat World Tree bac 4"; "WorldTreeRelic_05"="Glistening Ancient Relic (Di Vat Lap Lanh)"
+ "PalUpgradeStone"="Hon Pal Nho"; "PalUpgradeStone2"="Hon Pal Vua"; "PalUpgradeStone3"="Hon Pal Lon"; "PalUpgradeStone4"="Hon Pal Khong Lo"
+ "Rankup_1"="Starfruit *1"; "Rankup_2"="Starfruit *2"; "Rankup_3"="Starfruit *3"; "Rankup_4"="Starfruit *4"; "Rankup_Arbitrary"="Ripe Starfruit (nang bat ky +1)"
+ "Fruit_hp_01"="Life Fruit (tang Mau)"; "Fruit_attack_01"="Attack Fruit (tang Tan cong)"; "Fruit__defense_01"="Defense Fruit (tang Phong thu)"; "AffectionFruit_01"="Affection Fruit (than thiet)"; "AffectionFruit_02"="Affection Fruit II"
+ "IronIngot"="Thoi Sat"; "CopperIngot"="Thoi Dong"; "ManganeseIngot"="Thoi Mangan"; "StealIngot"="Thoi Thep"; "SkyislandIngot"="Thoi Dao Troi"; "WorldTreeIngot"="Thoi Cay The Gioi"
+ "IronOre"="Quang Sat"; "CopperOre"="Quang Dong"; "ManganeseOre"="Quang Mangan"; "SkyIslandOre"="Quang Dao Troi"; "WorldTreeOre"="Quang Cay The Gioi"
+ "Coal"="Than"; "Sulfur"="Luu Huynh"; "Quartz"="Thach Anh"; "CarbonFiber"="Soi Carbon"; "Cement"="Xi Mang"; "Charcoal"="Than Cui"
+ "Gunpowder2"="Thuoc Sung (den)"; "Gunpowder"="Thuoc Sung (loai thap)"
+ "Bio_Battery"="Bio Battery (Pin Sinh Hoc)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Moi An Mon)"; "Bio_Coolant"="Cryogenic Coolant (Chat Lam Mat)"
+ "Thermal_Core"="Thermal Core (Loi Nhiet)"; "AIcore"="AI Core"; "Computer"="Computer (May Tinh)"
+ "ElectricOrgan"="Electric Organ (Co Quan Dien)"; "FireOrgan"="Flame Organ (Co Quan Lua)"; "IceOrgan"="Ice Organ (Co Quan Bang)"
+ "UniqueMaterial_Mothman"="Explosion-Resistant Fiber (tu Silvance)"; "UniqueMaterial_FlowerPrince"="Toxin Filtering Membrane (tu Dandilord)"
+ "Venom"="Venom Gland (Tuyen Doc)"; "PalDarkParts"="Dark Fragment (Manh Bong Toi)"; "MeteorDrop"="Meteorite Fragment (Manh Thien Thach)"
+ "CrudeOil"="Crude Oil (Dau Tho)"; "Bone"="Bone (Xuong)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thu"
+ "PalItem_ToSell_04"="Precious Claw (Mong Vuot Quy)"; "PalItem_ToSell_05"="Precious Plume (Long Vu Quy)"
+ "PalGenderReverse"="Pal Reverser (doi gioi tinh)"; "WingGlider_Fuel"="Wing Cell (nhien lieu Wing Pack)"; "BeamLauncherBullet"="Beam Launcher Ammo (dan Beam)"
+ "Eemerald"="Emerald (Ngoc Luc Bao)"; "Diamond"="Diamond (Kim Cuong)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vang (Tien)"
+ "WorkSuitability_AddTicket_MonsterFarm"="Sach Ranching (nuoi Pal)"; "WorkSuitability_AddTicket_Watering"="Sach Watering (tuoi nuoc)"; "WorkSuitability_AddTicket_Seeding"="Sach Planting (trong cay)"; "WorkSuitability_AddTicket_Collection"="Sach Gathering (thu thap)"; "WorkSuitability_AddTicket_Deforest"="Sach Lumbering (don go)"; "WorkSuitability_AddTicket_Mining"="Sach Mining (khai thac)"; "WorkSuitability_AddTicket_EmitFlame"="Sach Kindling (dot lua)"; "WorkSuitability_AddTicket_Handcraft"="Sach Handiwork (thu cong)"; "WorkSuitability_AddTicket_Cool"="Sach Cooling (lam mat)"; "WorkSuitability_AddTicket_ProductMedicine"="Sach Medicine (che thuoc)"; "WorkSuitability_AddTicket_Transport"="Sach Transporting (van chuyen)"; "WorkSuitability_AddTicket_GenerateElectricity"="Sach Generating Electricity (phat dien)"
+ "PalSphere"="Pal Sphere"; "PalSphere_Mega"="Mega Sphere"; "PalSphere_Giga"="Giga Sphere"; "PalSphere_Master"="Master Sphere"; "PalSphere_Legend"="Legendary Sphere"; "PalSphere_Ultimate"="Ultimate Sphere"; "PalSphere_Ancient_1"="Ancient Sphere I"; "PalSphere_Ancient_2"="Ancient Sphere II"
+ "PAL_Growth_Stone_S"="Da Tang Truong Pal S"; "PAL_Growth_Stone_M"="Da Tang Truong Pal M"; "PAL_Growth_Stone_L"="Da Tang Truong Pal L"; "PAL_Growth_Stone_XL"="Da Tang Truong Pal XL"
+ "AncientTechnologyBook_G1"="Ancient Tech Manual (diem KT co)"; "TechnologyBook_G1"="Technology Manual (diem KT)"; "TechnologyBook_G2"="Technology Manual II"; "TechnologyBook_G3"="Technology Manual III"
 }
 
+$script:allItems=New-Object System.Collections.ArrayList
+$script:names=@{}; $script:nameOf=@{}; $script:configPath=""; $script:ready=$false
+
+function Load-Data($root) {
+    $modDir=Get-ModDir $root
+    $validPath=Join-Path $modDir "Scripts\GeneratedItemIDs.lua"
+    $namesPath=Join-Path $modDir "ItemIDs.txt"
+    $script:configPath=Join-Path $modDir "config.jsonc"
+    $script:allItems.Clear(); $script:names=@{}; $script:nameOf=@{}
+    if (-not (Test-Path $validPath)) { $script:ready=$false; return $false }
+    $valid=@{}
+    foreach ($line in [System.IO.File]::ReadAllLines($validPath)) { if ($line -match '\["([^"]+)"\]\s*=\s*true') { $valid[$matches[1]]=$true } }
+    if (Test-Path $namesPath) { foreach ($line in [System.IO.File]::ReadAllLines($namesPath)) { if ($line -match '^([A-Za-z0-9_]+)\s*=\s*(.+?)\s*$') { $script:names[$matches[1]]=$matches[2] } } }
+    foreach ($id in ($valid.Keys | Sort-Object)) {
+        $nm=""
+        if ($script:override.ContainsKey($id)) { $nm=$script:override[$id] }
+        elseif ($script:names.ContainsKey($id) -and $script:names[$id] -ne "Unknown") { $nm=$script:names[$id] }
+        $script:nameOf[$id]=$nm
+        $has=[bool]$nm
+        $disp=if ($nm) { "$nm  [$id]" } else { $id }
+        [void]$script:allItems.Add([PSCustomObject]@{ Id=$id; Name=$nm; Display=$disp; HasName=$has })
+    }
+    $script:ready=$true; return $true
+}
+function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
+
 # ===== Form =====
-$form = New-Object System.Windows.Forms.Form
-$form.Text = "Palworld Loot Tool - by Claude"
-$form.Size = New-Object System.Drawing.Size(900,660)
-$form.StartPosition = "CenterScreen"
-$form.Font = New-Object System.Drawing.Font("Segoe UI",9)
+$form=New-Object System.Windows.Forms.Form
+$form.Text="Palworld Loot Tool - by Claude"; $form.Size=New-Object System.Drawing.Size(900,690)
+$form.StartPosition="CenterScreen"; $form.Font=New-Object System.Drawing.Font("Segoe UI",9)
 
-$lblPath = New-Object System.Windows.Forms.Label
-$lblPath.Text="Duong dan game (thu muc chua Palworld.exe):"; $lblPath.Location='12,12'; $lblPath.AutoSize=$true
-$txtPath = New-Object System.Windows.Forms.TextBox
-$txtPath.Location='12,32'; $txtPath.Size='640,24'; $txtPath.Text=$script:gameRoot
-$btnBrowse = New-Object System.Windows.Forms.Button
-$btnBrowse.Text="..."; $btnBrowse.Location='658,31'; $btnBrowse.Size='34,26'
-$btnApplyPath = New-Object System.Windows.Forms.Button
-$btnApplyPath.Text="Ap dung"; $btnApplyPath.Location='700,31'; $btnApplyPath.Size='90,26'
-$lblPathStat = New-Object System.Windows.Forms.Label
-$lblPathStat.Location='12,58'; $lblPathStat.Size='790,18'
+$lblPath=New-Object System.Windows.Forms.Label; $lblPath.Text="Duong dan game (thu muc chua Palworld.exe):"; $lblPath.Location='12,12'; $lblPath.AutoSize=$true
+$txtPath=New-Object System.Windows.Forms.TextBox; $txtPath.Location='12,32'; $txtPath.Size='640,24'; $txtPath.Text=$script:gameRoot
+$btnBrowse=New-Object System.Windows.Forms.Button; $btnBrowse.Text="..."; $btnBrowse.Location='658,31'; $btnBrowse.Size='34,26'
+$btnApplyPath=New-Object System.Windows.Forms.Button; $btnApplyPath.Text="Ap dung"; $btnApplyPath.Location='700,31'; $btnApplyPath.Size='90,26'
+$lblPathStat=New-Object System.Windows.Forms.Label; $lblPathStat.Location='12,58'; $lblPathStat.Size='790,18'
 
-# --- Toggle ON/OFF ---
-$chkOn = New-Object System.Windows.Forms.CheckBox
-$chkOn.Text="BAT MOD (ON)   -   bo chon = OFF (game farm binh thuong)"
-$chkOn.Location='12,80'; $chkOn.AutoSize=$true; $chkOn.Checked=$true
-$chkOn.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
-$chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67)
+$chkOn=New-Object System.Windows.Forms.CheckBox; $chkOn.Text="BAT MOD (ON)   -   bo chon = OFF (game farm binh thuong)"; $chkOn.Location='12,80'; $chkOn.AutoSize=$true; $chkOn.Checked=$true
+$chkOn.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold); $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67)
 
-$lblSearch = New-Object System.Windows.Forms.Label
-$lblSearch.Text="Tim item:"; $lblSearch.Location='12,116'; $lblSearch.AutoSize=$true
-$txtSearch = New-Object System.Windows.Forms.TextBox
-$txtSearch.Location='80,113'; $txtSearch.Size='360,24'
-$lblHint = New-Object System.Windows.Forms.Label
-$lblHint.Text="(go ten hoac ma item)"; $lblHint.Location='450,116'; $lblHint.AutoSize=$true; $lblHint.ForeColor='Gray'
+$lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tim item:"; $lblSearch.Location='12,116'; $lblSearch.AutoSize=$true
+$txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='80,113'; $txtSearch.Size='300,24'
+$chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chi hien item co ten"; $chkNamed.Location='392,115'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true
 
-$lst = New-Object System.Windows.Forms.ListBox
-$lst.Location='12,144'; $lst.Size='440,400'
+$lst=New-Object System.Windows.Forms.ListBox; $lst.Location='12,144'; $lst.Size='440,410'
 
-$btnAdd = New-Object System.Windows.Forms.Button
-$btnAdd.Text="Them ->"; $btnAdd.Location='462,230'; $btnAdd.Size='90,34'
-$btnRem = New-Object System.Windows.Forms.Button
-$btnRem.Text="<- Xoa"; $btnRem.Location='462,272'; $btnRem.Size='90,34'
+$btnAdd=New-Object System.Windows.Forms.Button; $btnAdd.Text="Them ->"; $btnAdd.Location='462,230'; $btnAdd.Size='90,34'
+$btnRem=New-Object System.Windows.Forms.Button; $btnRem.Text="<- Xoa"; $btnRem.Location='462,272'; $btnRem.Size='90,34'
 
-$grid = New-Object System.Windows.Forms.DataGridView
-$grid.Location='562,144'; $grid.Size='320,360'
-$grid.AllowUserToAddRows=$false; $grid.RowHeadersVisible=$false
-$grid.SelectionMode='FullRowSelect'; $grid.AutoSizeColumnsMode='None'
-$colName=New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-$colName.HeaderText="Ten"; $colName.ReadOnly=$true; $colName.Width=185
-$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-$colQty.HeaderText="So luong"; $colQty.Width=95
-$colId=New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-$colId.HeaderText="Id"; $colId.Visible=$false
+$grid=New-Object System.Windows.Forms.DataGridView; $grid.Location='562,144'; $grid.Size='320,360'
+$grid.AllowUserToAddRows=$false; $grid.RowHeadersVisible=$false; $grid.SelectionMode='FullRowSelect'; $grid.AutoSizeColumnsMode='None'
+$colName=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colName.HeaderText="Ten"; $colName.ReadOnly=$true; $colName.Width=185
+$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colQty.HeaderText="So luong"; $colQty.Width=95
+$colId=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colId.HeaderText="Id"; $colId.Visible=$false
 $grid.Columns.AddRange($colName,$colQty,$colId)
 
-$lblSel=New-Object System.Windows.Forms.Label
-$lblSel.Text="Da chon: 0/7"; $lblSel.Location='562,510'; $lblSel.AutoSize=$true
+$lblSel=New-Object System.Windows.Forms.Label; $lblSel.Text="Da chon: 0/7"; $lblSel.Location='562,510'; $lblSel.AutoSize=$true
 $lblSel.Font=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
 
-$btnSave=New-Object System.Windows.Forms.Button
-$btnSave.Text="LUU & AP DUNG"; $btnSave.Location='562,534'; $btnSave.Size='320,42'
-$btnSave.BackColor=[System.Drawing.Color]::FromArgb(46,160,67); $btnSave.ForeColor='White'
-$btnSave.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
+$btnSave=New-Object System.Windows.Forms.Button; $btnSave.Text="LUU & AP DUNG"; $btnSave.Location='562,534'; $btnSave.Size='320,42'
+$btnSave.BackColor=[System.Drawing.Color]::FromArgb(46,160,67); $btnSave.ForeColor='White'; $btnSave.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
 
-$lblStatus=New-Object System.Windows.Forms.Label
-$lblStatus.Location='12,548'; $lblStatus.Size='540,60'
-$lblStatus.Text="Bat ON de chon item, hoac bo chon (OFF) roi LUU de tro ve farm binh thuong. Sau khi luu, RESTART Palworld."
-$lblStatus.ForeColor=[System.Drawing.Color]::DimGray
+$lblStatus=New-Object System.Windows.Forms.Label; $lblStatus.Location='12,566'; $lblStatus.Size='540,70'
+$lblStatus.Text="Bat ON de chon item, hoac bo chon (OFF) roi LUU de tro ve farm binh thuong. Sau khi luu, RESTART Palworld."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
 
-$form.Controls.AddRange(@($lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$chkOn,$lblSearch,$txtSearch,$lblHint,$lst,$btnAdd,$btnRem,$grid,$lblSel,$btnSave,$lblStatus))
+$form.Controls.AddRange(@($lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$chkOn,$lblSearch,$txtSearch,$chkNamed,$lst,$btnAdd,$btnRem,$grid,$lblSel,$btnSave,$lblStatus))
 
 # ===== Logic =====
 function Refresh-Pool {
-    $q=$txtSearch.Text.Trim().ToLower(); $lst.BeginUpdate(); $lst.Items.Clear()
-    foreach ($it in $script:allItems) { if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) } }
+    $q=$txtSearch.Text.Trim().ToLower(); $onlyNamed=$chkNamed.Checked
+    $lst.BeginUpdate(); $lst.Items.Clear()
+    foreach ($it in $script:allItems) {
+        if ($onlyNamed -and -not $it.HasName) { continue }
+        if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) }
+    }
     $lst.EndUpdate()
 }
-function Update-Count {
-    $lblSel.Text="Da chon: $($grid.Rows.Count)/7"
-    $btnAdd.Enabled=($chkOn.Checked -and $script:ready -and $grid.Rows.Count -lt 7)
-}
+function Update-Count { $lblSel.Text="Da chon: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($chkOn.Checked -and $script:ready -and $grid.Rows.Count -lt 7) }
 function Set-ItemEnabled {
     $on=$chkOn.Checked -and $script:ready
-    $txtSearch.Enabled=$on; $lst.Enabled=$on; $btnRem.Enabled=$on; $grid.Enabled=$on
+    $txtSearch.Enabled=$on; $lst.Enabled=$on; $btnRem.Enabled=$on; $grid.Enabled=$on; $chkNamed.Enabled=$on
     if ($chkOn.Checked) { $chkOn.Text="BAT MOD (ON)   -   dang cho chon item"; $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67) }
     else { $chkOn.Text="MOD DANG OFF   -   tich vao de BAT (ON)"; $chkOn.ForeColor=[System.Drawing.Color]::Firebrick }
     Update-Count
@@ -135,16 +131,10 @@ function Load-Current {
     $grid.Rows.Clear()
     if (-not (Test-Path $script:configPath)) { $chkOn.Checked=$true; return }
     try {
-        $raw=[System.IO.File]::ReadAllText($script:configPath)
-        $clean=($raw -split "`n" | Where-Object { $_ -notmatch '^\s*//' }) -join "`n"
-        $obj=$clean | ConvertFrom-Json
-        $cnt=0
-        foreach ($d in $obj.Drops) {
-            $nm=""; if ($script:names.ContainsKey($d.ItemId) -and $script:names[$d.ItemId] -ne "Unknown"){$nm=$script:names[$d.ItemId]}
-            $dispName=if($nm){$nm}else{$d.ItemId}
-            [void]$grid.Rows.Add($dispName,$d.MinAmount,$d.ItemId); $cnt++
-        }
-        $chkOn.Checked = ($cnt -gt 0)   # co drop = ON, rong = OFF
+        $raw=[System.IO.File]::ReadAllText($script:configPath); $clean=($raw -split "`n" | Where-Object { $_ -notmatch '^\s*//' }) -join "`n"
+        $obj=$clean | ConvertFrom-Json; $cnt=0
+        foreach ($d in $obj.Drops) { [void]$grid.Rows.Add((Get-Name $d.ItemId),$d.MinAmount,$d.ItemId); $cnt++ }
+        $chkOn.Checked=($cnt -gt 0)
     } catch { $chkOn.Checked=$true }
 }
 function Write-Config($dropsBody) {
@@ -153,30 +143,15 @@ function Write-Config($dropsBody) {
 }
 function Apply-Path {
     $root=$txtPath.Text.Trim().TrimEnd('\')
-    if ($root -eq "") {
-        $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Duong dan dang TRONG - hay dan duong dan thu muc game."
-        [System.Windows.Forms.MessageBox]::Show("Ban chua nhap duong dan game!","Thieu duong dan",0,48)|Out-Null
-        $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return
-    }
-    if (Load-Data $root) {
-        $script:gameRoot=$root
-        try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}
-        $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item). Da luu duong dan."
-        Refresh-Pool; Load-Current; Set-ItemEnabled
-    } else {
-        $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="SAI duong dan - khong thay mod CustomizableLootDrops o day."
-        [System.Windows.Forms.MessageBox]::Show("Duong dan khong dung!`nKhong tim thay mod CustomizableLootDrops trong:`n$root`n`nHay chon dung thu muc goc Palworld (chua Palworld.exe).","Sai duong dan",0,48)|Out-Null
-        $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled
-    }
+    if ($root -eq "") { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Duong dan dang TRONG."; [System.Windows.Forms.MessageBox]::Show("Ban chua nhap duong dan game!","Thieu duong dan",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return }
+    if (Load-Data $root) { $script:gameRoot=$root; try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}; $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item). Da luu duong dan."; Refresh-Pool; Load-Current; Set-ItemEnabled }
+    else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="SAI duong dan - khong thay mod o day."; [System.Windows.Forms.MessageBox]::Show("Duong dan khong dung! Khong tim thay mod CustomizableLootDrops trong:`n$root`n`nHay chon dung thu muc goc Palworld.","Sai duong dan",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled }
 }
 
-$btnBrowse.Add_Click({
-    $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chon thu muc Palworld (chua Palworld.exe)"
-    if (Test-Path $txtPath.Text) { $fb.SelectedPath=$txtPath.Text }
-    if ($fb.ShowDialog() -eq 'OK') { $txtPath.Text=$fb.SelectedPath; Apply-Path }
-})
+$btnBrowse.Add_Click({ $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chon thu muc Palworld"; if (Test-Path $txtPath.Text){$fb.SelectedPath=$txtPath.Text}; if ($fb.ShowDialog() -eq 'OK'){ $txtPath.Text=$fb.SelectedPath; Apply-Path } })
 $btnApplyPath.Add_Click({ Apply-Path })
 $chkOn.Add_CheckedChanged({ Set-ItemEnabled })
+$chkNamed.Add_CheckedChanged({ Refresh-Pool })
 $txtSearch.Add_TextChanged({ Refresh-Pool })
 $lst.Add_DoubleClick({ $btnAdd.PerformClick() })
 $btnAdd.Add_Click({
@@ -188,41 +163,26 @@ $btnAdd.Add_Click({
     [void]$grid.Rows.Add($dispName,9999,$it.Id); Update-Count
 })
 $btnRem.Add_Click({ if ($grid.SelectedRows.Count -gt 0) { $grid.Rows.Remove($grid.SelectedRows[0]); Update-Count } })
-
 $btnSave.Add_Click({
-    if (-not $script:ready) {
-        [System.Windows.Forms.MessageBox]::Show("Chua chon dung duong dan game (hoac de trong)!`nHay dan/duyet duong dan game va bam 'Ap dung' truoc.","Thieu duong dan",0,48)|Out-Null; return
-    }
+    if (-not $script:ready) { [System.Windows.Forms.MessageBox]::Show("Chua chon dung duong dan game (hoac de trong)! Hay bam 'Ap dung' truoc.","Thieu duong dan",0,48)|Out-Null; return }
     if ($chkOn.Checked) {
         $grid.EndEdit()
-        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod dang ON nhung chua chon item nao.`nChon item hoac bo chon ON de tat mod.","Chua chon item",0,48)|Out-Null; return }
+        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod ON nhung chua chon item nao.","Chua chon item",0,48)|Out-Null; return }
         $drops=@()
         foreach ($r in $grid.Rows) {
             $id=[string]$r.Cells[2].Value; $qtyRaw=[string]$r.Cells[1].Value; $qty=0
-            if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("So luong khong hop le o dong: $($r.Cells[0].Value)","Loi",0,48)|Out-Null; return }
+            if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("So luong khong hop le: $($r.Cells[0].Value)","Loi",0,48)|Out-Null; return }
             if ($qty -gt 99999) { $qty=99999 }
             $drops+=('    { "ItemId": "'+$id+'", "Chance": 100.0, "MinAmount": '+$qty+', "MaxAmount": '+$qty+' }')
         }
-        try {
-            Write-Config ($drops -join ",`r`n")
-            $lblStatus.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblStatus.Text="MOD ON - da luu ($($grid.Rows.Count) item). RESTART Palworld la co."
-            [System.Windows.Forms.MessageBox]::Show("Mod ON - da luu $($grid.Rows.Count) item!`n`nRESTART Palworld (thoat han + mo lai).","Xong",0,64)|Out-Null
-        } catch { [System.Windows.Forms.MessageBox]::Show("Loi khi luu: $($_.Exception.Message)","Loi",0,16)|Out-Null }
+        try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblStatus.Text="MOD ON - da luu ($($grid.Rows.Count) item). RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod ON - da luu $($grid.Rows.Count) item!`n`nRESTART Palworld de ap dung.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Loi: $($_.Exception.Message)","Loi",0,16)|Out-Null }
     } else {
-        try {
-            Write-Config ""   # Drops rong = mod khong them gi = farm binh thuong
-            $lblStatus.ForeColor=[System.Drawing.Color]::Firebrick; $lblStatus.Text="MOD OFF - game farm binh thuong. RESTART Palworld la ap dung."
-            [System.Windows.Forms.MessageBox]::Show("Mod OFF - game se farm BINH THUONG (khong drop them).`n`nRESTART Palworld de ap dung.","Da tat mod",0,64)|Out-Null
-        } catch { [System.Windows.Forms.MessageBox]::Show("Loi khi luu: $($_.Exception.Message)","Loi",0,16)|Out-Null }
+        try { Write-Config ""; $lblStatus.ForeColor=[System.Drawing.Color]::Firebrick; $lblStatus.Text="MOD OFF - game farm binh thuong. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod OFF - game farm BINH THUONG.`n`nRESTART Palworld de ap dung.","Da tat mod",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Loi: $($_.Exception.Message)","Loi",0,16)|Out-Null }
     }
 })
 
 # ===== Khoi tao =====
-if (Load-Data $script:gameRoot) {
-    $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item)."
-    Refresh-Pool; Load-Current
-} else {
-    $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Chua thay mod o duong dan mac dinh. Dan duong dan game roi bam 'Ap dung'."
-}
+if (Load-Data $script:gameRoot) { $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - da nhan dien mod ($($script:allItems.Count) item)."; Refresh-Pool; Load-Current }
+else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Chua thay mod o duong dan mac dinh. Dan duong dan roi bam 'Ap dung'." }
 Set-ItemEnabled
 [void]$form.ShowDialog()
