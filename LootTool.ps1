@@ -202,17 +202,32 @@ $btnAdd.Add_Click({
     [void]$grid.Rows.Add($dispName,9999,$it.Id); Update-Count
 })
 $btnRem.Add_Click({ if ($grid.SelectedRows.Count -gt 0) { $grid.Rows.Remove($grid.SelectedRows[0]); Update-Count } })
+$grid.Add_CellEndEdit({
+    param($s,$e)
+    if ($e.ColumnIndex -ne 1) { return }
+    $row=$grid.Rows[$e.RowIndex]; $id=[string]$row.Cells[2].Value; $raw=[string]$row.Cells[1].Value; $q=0
+    if (-not [int]::TryParse($raw,[ref]$q) -or $q -lt 1) { $row.Cells[1].Value=1; return }
+    $max = if ($id -eq "Money") { 10000000 } else { 9999 }
+    if ($q -gt $max) { $q=$max }
+    $row.Cells[1].Value=$q
+})
 $btnSave.Add_Click({
     if (-not $script:ready) { [System.Windows.Forms.MessageBox]::Show("Chưa chọn đúng đường dẫn game (hoặc để trống)! Hãy bấm 'Áp dụng' trước.","Thiếu đường dẫn",0,48)|Out-Null; return }
     if ($script:toggleOn) {
         $grid.EndEdit()
         if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod đang BẬT nhưng chưa chọn item nào.","Chưa chọn item",0,48)|Out-Null; return }
-        $drops=@()
+        $drops=@(); $hasBig=$false
         foreach ($r in $grid.Rows) {
             $id=[string]$r.Cells[2].Value; $qtyRaw=[string]$r.Cells[1].Value; $qty=0
             if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("Số lượng không hợp lệ: $($r.Cells[0].Value)","Lỗi",0,48)|Out-Null; return }
-            if ($qty -gt 99999) { $qty=99999 }
+            $max = if ($id -eq "Money") { 10000000 } else { 9999 }
+            if ($qty -gt $max) { $qty=$max; $r.Cells[1].Value=$qty }
+            if ($qty -ge 1000) { $hasBig=$true }
             $drops+=('    { "ItemId": "'+$id+'", "Chance": 100.0, "MinAmount": '+$qty+', "MaxAmount": '+$qty+' }')
+        }
+        if ($hasBig) {
+            $res=[System.Windows.Forms.MessageBox]::Show("⚠️ Việc chỉnh vật phẩm với số lượng lớn (từ 1000 trở lên) có thể gây MẤT CÂN BẰNG và ảnh hưởng đến trải nghiệm game.`n`nGiới hạn: vật phẩm thường tối đa 9999, riêng Vàng tối đa 10 triệu.`n`nBạn có chắc muốn tiếp tục lưu?","Cảnh báo cân bằng",4,48)
+            if ($res -ne 'Yes') { return }
         }
         try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=$cGreen; $lblStatus.Text="✓ MOD BẬT — đã lưu $($grid.Rows.Count) item. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod BẬT — đã lưu $($grid.Rows.Count) item!`n`nRESTART Palworld để áp dụng.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
     } else {
