@@ -18,7 +18,7 @@ $script:override = @{
  "Wood_Fine"="Hardwood (Gỗ Cứng)"; "Wood_Ancient"="Ancient Bark (Vỏ Cây Cổ)"; "Wood"="Gỗ"
  "AncientParts2"="Ancient Civilization Core (Lõi Văn Minh Cổ)"; "AncientParts3"="Ancient Pal Manuscript (Bản Thảo Pal Cổ)"
  "PalCrystal_Ex"="Ancient Civilization Parts (Mảnh Văn Minh Cổ)"
- "WorldTreeRelic_05"="Glistening Ancient Relic (Di Vật Lấp Lánh)"
+ "WorldTreeRelic_01"="Di Vật World Tree bậc 1"; "WorldTreeRelic_02"="Di Vật World Tree bậc 2"; "WorldTreeRelic_03"="Di Vật World Tree bậc 3"; "WorldTreeRelic_04"="Di Vật World Tree bậc 4"; "WorldTreeRelic_05"="Glistening Ancient Relic (Di Vật Lấp Lánh)"
  "PalUpgradeStone"="Hồn Pal Nhỏ"; "PalUpgradeStone2"="Hồn Pal Vừa"; "PalUpgradeStone3"="Hồn Pal Lớn"; "PalUpgradeStone4"="Hồn Pal Khổng Lồ"
  "Rankup_1"="Starfruit ☆1"; "Rankup_2"="Starfruit ☆2"; "Rankup_3"="Starfruit ☆3"; "Rankup_4"="Starfruit ☆4"; "Rankup_Arbitrary"="Ripe Starfruit (nâng bất kỳ +1)"
  "Fruit_hp_01"="Life Fruit (tăng Máu)"; "Fruit_attack_01"="Attack Fruit (tăng Tấn công)"; "Fruit__defense_01"="Defense Fruit (tăng Phòng thủ)"; "AffectionFruit_01"="Affection Fruit (thân thiết)"; "AffectionFruit_02"="Affection Fruit II"
