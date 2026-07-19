@@ -6,14 +6,31 @@ Hoạt động dựa trên mod **CustomizableLootDrops** (UE4SS). Tool chỉ ghi
 
 ---
 
-## ✅ Yêu cầu (cần cài trước)
+## ✅ Yêu cầu (cần tải & cài trước)
 
-Game phải được mod sẵn theo thứ tự:
+Cài theo thứ tự sau:
 
-1. **UE4SS** (bản Okaetsu dành cho Palworld) — bộ nạp mod
-2. **CustomizableLootDrops** — mod xử lý việc rơi đồ ([Nexus mod 3836](https://www.nexusmods.com/palworld/mods/3836))
+### 1️⃣ UE4SS (bản Okaetsu cho Palworld) — bộ nạp mod
+🔗 **Tải:** https://github.com/Okaetsu/RE-UE4SS/releases/tag/experimental-palworld
+- Tải file **`UE4SS-Palworld.zip`**
+- Giải nén → copy `dwmapi.dll` **và** thư mục `ue4ss` vào:
+  ```
+  ...\Palworld\Pal\Binaries\Win64\
+  ```
+- ⚠️ Phải dùng đúng **bản Okaetsu này** — bản UE4SS chung sẽ gây crash.
 
-Nếu đập Pal chưa ra đồ custom thì kiểm tra 2 cái trên đã cài đúng chưa.
+### 2️⃣ CustomizableLootDrops — mod xử lý rơi đồ
+🔗 **Tải:** https://www.nexusmods.com/palworld/mods/3836
+- Giải nén → copy thư mục `CustomizableLootDrops` vào:
+  ```
+  ...\Palworld\Pal\Binaries\Win64\ue4ss\Mods\
+  ```
+
+### 3️⃣ Tool này (ToolPalWorld)
+🔗 **Tải:** https://github.com/devsolution52hz/ToolPalWorld
+- Tải file **`PalworldLootTool.exe`** về là chạy được.
+
+> Nếu đập Pal chưa ra đồ custom → kiểm tra bước 1 & 2 đã cài đúng vị trí chưa.
 
 ---
 
