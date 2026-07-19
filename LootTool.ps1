@@ -42,7 +42,7 @@ $script:override = @{
 }
 
 $script:allItems=New-Object System.Collections.ArrayList
-$script:names=@{}; $script:nameOf=@{}; $script:configPath=""; $script:ready=$false
+$script:names=@{}; $script:nameOf=@{}; $script:configPath=""; $script:ready=$false; $script:toggleOn=$true
 
 function Load-Data($root) {
     $modDir=Get-ModDir $root
@@ -58,84 +58,122 @@ function Load-Data($root) {
         $nm=""
         if ($script:override.ContainsKey($id)) { $nm=$script:override[$id] }
         elseif ($script:names.ContainsKey($id) -and $script:names[$id] -ne "Unknown") { $nm=$script:names[$id] }
-        $script:nameOf[$id]=$nm
-        $has=[bool]$nm
+        $script:nameOf[$id]=$nm; $has=[bool]$nm
         $disp=if ($nm) { "$nm  [$id]" } else { $id }
         [void]$script:allItems.Add([PSCustomObject]@{ Id=$id; Name=$nm; Display=$disp; HasName=$has })
     }
     $script:ready=$true; return $true
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
+function New-RoundRect($x,$y,$w,$h,$r) {
+    $p=New-Object System.Drawing.Drawing2D.GraphicsPath; $d=$r*2
+    $p.AddArc($x,$y,$d,$d,180,90); $p.AddArc($x+$w-$d,$y,$d,$d,270,90); $p.AddArc($x+$w-$d,$y+$h-$d,$d,$d,0,90); $p.AddArc($x,$y+$h-$d,$d,$d,90,90); $p.CloseFigure(); return $p
+}
+
+# ===== Mau =====
+$cBg    = [System.Drawing.Color]::FromArgb(245,246,248)
+$cGreen = [System.Drawing.Color]::FromArgb(46,204,113)
+$cBlue  = [System.Drawing.Color]::FromArgb(52,152,219)
+$cGray  = [System.Drawing.Color]::FromArgb(149,165,166)
+$cDark  = [System.Drawing.Color]::FromArgb(44,62,80)
+$cRed   = [System.Drawing.Color]::FromArgb(192,57,43)
+
+function Style-Btn($b,$bg,$fg){ $b.FlatStyle='Flat'; $b.FlatAppearance.BorderSize=0; $b.BackColor=$bg; $b.ForeColor=$fg; $b.Cursor='Hand'; $b.Font=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold) }
 
 # ===== Form =====
 $form=New-Object System.Windows.Forms.Form
-$form.Text="Palworld Loot Tool - by Claude"; $form.Size=New-Object System.Drawing.Size(900,690)
-$form.StartPosition="CenterScreen"; $form.Font=New-Object System.Drawing.Font("Segoe UI",9)
+$form.Text="Palworld Loot Tool"; $form.Size=New-Object System.Drawing.Size(920,720)
+$form.StartPosition="CenterScreen"; $form.Font=New-Object System.Drawing.Font("Segoe UI",9); $form.BackColor=$cBg
 
-$lblPath=New-Object System.Windows.Forms.Label; $lblPath.Text="Đường dẫn game (thư mục chứa Palworld.exe):"; $lblPath.Location='12,12'; $lblPath.AutoSize=$true
-$txtPath=New-Object System.Windows.Forms.TextBox; $txtPath.Location='12,32'; $txtPath.Size='640,24'; $txtPath.Text=$script:gameRoot
-$btnBrowse=New-Object System.Windows.Forms.Button; $btnBrowse.Text="..."; $btnBrowse.Location='658,31'; $btnBrowse.Size='34,26'
-$btnApplyPath=New-Object System.Windows.Forms.Button; $btnApplyPath.Text="Áp dụng"; $btnApplyPath.Location='700,31'; $btnApplyPath.Size='90,26'
-$lblPathStat=New-Object System.Windows.Forms.Label; $lblPathStat.Location='12,58'; $lblPathStat.Size='790,18'
+# Header
+$header=New-Object System.Windows.Forms.Panel; $header.Location='0,0'; $header.Size='920,54'; $header.BackColor=$cDark
+$lblTitle=New-Object System.Windows.Forms.Label; $lblTitle.Text="🎮  PALWORLD LOOT TOOL"; $lblTitle.ForeColor='White'; $lblTitle.Location='18,12'; $lblTitle.AutoSize=$true
+$lblTitle.Font=New-Object System.Drawing.Font("Segoe UI",14,[System.Drawing.FontStyle]::Bold)
+$header.Controls.Add($lblTitle)
 
-$chkOn=New-Object System.Windows.Forms.CheckBox; $chkOn.Text="BẬT MOD (ON)   -   bỏ chọn = OFF (game farm bình thường)"; $chkOn.Location='12,80'; $chkOn.AutoSize=$true; $chkOn.Checked=$true
-$chkOn.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold); $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67)
+# Path
+$lblPath=New-Object System.Windows.Forms.Label; $lblPath.Text="Đường dẫn game (thư mục chứa Palworld.exe):"; $lblPath.Location='18,68'; $lblPath.AutoSize=$true; $lblPath.ForeColor=$cDark
+$txtPath=New-Object System.Windows.Forms.TextBox; $txtPath.Location='18,88'; $txtPath.Size='650,26'; $txtPath.Text=$script:gameRoot; $txtPath.BorderStyle='FixedSingle'
+$btnBrowse=New-Object System.Windows.Forms.Button; $btnBrowse.Text="..."; $btnBrowse.Location='674,87'; $btnBrowse.Size='36,28'; Style-Btn $btnBrowse $cGray 'White'
+$btnApplyPath=New-Object System.Windows.Forms.Button; $btnApplyPath.Text="Áp dụng"; $btnApplyPath.Location='716,87'; $btnApplyPath.Size='90,28'; Style-Btn $btnApplyPath $cBlue 'White'
+$lblPathStat=New-Object System.Windows.Forms.Label; $lblPathStat.Location='18,118'; $lblPathStat.Size='860,18'
 
-$lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tìm item:"; $lblSearch.Location='12,116'; $lblSearch.AutoSize=$true
-$txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='80,113'; $txtSearch.Size='300,24'
-$chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='392,115'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true
+# Toggle
+$toggle=New-Object System.Windows.Forms.Panel; $toggle.Location='18,146'; $toggle.Size='96,36'; $toggle.Cursor='Hand'; $toggle.BackColor=$cBg
+$toggle.Add_Paint({
+    param($s,$e)
+    $g=$e.Graphics; $g.SmoothingMode='AntiAlias'
+    $w=$s.Width; $h=$s.Height
+    $bgc = if ($script:toggleOn) { [System.Drawing.Color]::FromArgb(46,204,113) } else { [System.Drawing.Color]::FromArgb(189,195,199) }
+    $path=New-RoundRect 0 0 ($w-1) ($h-1) ([int]($h/2))
+    $br=New-Object System.Drawing.SolidBrush $bgc; $g.FillPath($br,$path); $br.Dispose()
+    $d=$h-8; $kx = if ($script:toggleOn) { $w-$d-4 } else { 4 }
+    $wb=New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::White); $g.FillEllipse($wb,$kx,4,$d,$d); $wb.Dispose()
+    $txt = if ($script:toggleOn) { "ON" } else { "OFF" }
+    $fnt=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
+    $sf=New-Object System.Drawing.StringFormat; $sf.Alignment='Center'; $sf.LineAlignment='Center'
+    $tb=New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::White)
+    if ($script:toggleOn) { $rect=New-Object System.Drawing.RectangleF 4,0,($w-$d-8),$h } else { $rect=New-Object System.Drawing.RectangleF ($d+4),0,($w-$d-8),$h }
+    $g.DrawString($txt,$fnt,$tb,$rect,$sf); $tb.Dispose()
+})
+$lblToggleState=New-Object System.Windows.Forms.Label; $lblToggleState.Location='126,155'; $lblToggleState.AutoSize=$true; $lblToggleState.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
 
-$lst=New-Object System.Windows.Forms.ListBox; $lst.Location='12,144'; $lst.Size='440,410'
+# Item area
+$lblSearch=New-Object System.Windows.Forms.Label; $lblSearch.Text="Tìm item:"; $lblSearch.Location='18,200'; $lblSearch.AutoSize=$true; $lblSearch.ForeColor=$cDark
+$txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'; $txtSearch.Size='300,26'; $txtSearch.BorderStyle='FixedSingle'
+$chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
 
-$btnAdd=New-Object System.Windows.Forms.Button; $btnAdd.Text="Thêm →"; $btnAdd.Location='462,230'; $btnAdd.Size='90,34'
-$btnRem=New-Object System.Windows.Forms.Button; $btnRem.Text="← Xóa"; $btnRem.Location='462,272'; $btnRem.Size='90,34'
+$lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
 
-$grid=New-Object System.Windows.Forms.DataGridView; $grid.Location='562,144'; $grid.Size='320,360'
+$btnAdd=New-Object System.Windows.Forms.Button; $btnAdd.Text="Thêm →"; $btnAdd.Location='480,320'; $btnAdd.Size='96,36'; Style-Btn $btnAdd $cBlue 'White'
+$btnRem=New-Object System.Windows.Forms.Button; $btnRem.Text="← Xóa"; $btnRem.Location='480,364'; $btnRem.Size='96,36'; Style-Btn $btnRem $cGray 'White'
+
+$grid=New-Object System.Windows.Forms.DataGridView; $grid.Location='588,230'; $grid.Size='300,380'
 $grid.AllowUserToAddRows=$false; $grid.RowHeadersVisible=$false; $grid.SelectionMode='FullRowSelect'; $grid.AutoSizeColumnsMode='None'
+$grid.BorderStyle='FixedSingle'; $grid.BackgroundColor='White'; $grid.EnableHeadersVisualStyles=$false
+$grid.ColumnHeadersDefaultCellStyle.BackColor=$cDark; $grid.ColumnHeadersDefaultCellStyle.ForeColor='White'; $grid.ColumnHeadersDefaultCellStyle.Font=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
 $colName=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colName.HeaderText="Tên"; $colName.ReadOnly=$true; $colName.Width=185
-$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colQty.HeaderText="Số lượng"; $colQty.Width=95
+$colQty=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colQty.HeaderText="Số lượng"; $colQty.Width=90
 $colId=New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $colId.HeaderText="Id"; $colId.Visible=$false
 $grid.Columns.AddRange($colName,$colQty,$colId)
 
-$lblSel=New-Object System.Windows.Forms.Label; $lblSel.Text="Đã chọn: 0/7"; $lblSel.Location='562,510'; $lblSel.AutoSize=$true
+$lblSel=New-Object System.Windows.Forms.Label; $lblSel.Text="Đã chọn: 0/7"; $lblSel.Location='588,616'; $lblSel.AutoSize=$true; $lblSel.ForeColor=$cDark
 $lblSel.Font=New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
 
-$btnSave=New-Object System.Windows.Forms.Button; $btnSave.Text="LƯU & ÁP DỤNG"; $btnSave.Location='562,534'; $btnSave.Size='320,42'
-$btnSave.BackColor=[System.Drawing.Color]::FromArgb(46,160,67); $btnSave.ForeColor='White'; $btnSave.Font=New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
+$btnSave=New-Object System.Windows.Forms.Button; $btnSave.Text="💾  LƯU & ÁP DỤNG"; $btnSave.Location='18,652'; $btnSave.Size='870,44'; Style-Btn $btnSave $cGreen 'White'
+$btnSave.Font=New-Object System.Drawing.Font("Segoe UI",11,[System.Drawing.FontStyle]::Bold)
 
-$lblStatus=New-Object System.Windows.Forms.Label; $lblStatus.Location='12,566'; $lblStatus.Size='540,70'
-$lblStatus.Text="Bật ON để chọn item, hoặc bỏ chọn (OFF) rồi LƯU để trở về farm bình thường. Sau khi lưu, RESTART Palworld."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
+$lblStatus=New-Object System.Windows.Forms.Label; $lblStatus.Location='18,632'; $lblStatus.Size='550,18'
+$lblStatus.Text="Sau khi lưu, RESTART Palworld (thoát hẳn + mở lại) để áp dụng."; $lblStatus.ForeColor=[System.Drawing.Color]::DimGray
 
-$form.Controls.AddRange(@($lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$chkOn,$lblSearch,$txtSearch,$chkNamed,$lst,$btnAdd,$btnRem,$grid,$lblSel,$btnSave,$lblStatus))
+$form.Controls.AddRange(@($header,$lblPath,$txtPath,$btnBrowse,$btnApplyPath,$lblPathStat,$toggle,$lblToggleState,$lblSearch,$txtSearch,$chkNamed,$lst,$btnAdd,$btnRem,$grid,$lblSel,$lblStatus,$btnSave))
 
 # ===== Logic =====
 function Refresh-Pool {
     $q=$txtSearch.Text.Trim().ToLower(); $onlyNamed=$chkNamed.Checked
     $lst.BeginUpdate(); $lst.Items.Clear()
-    foreach ($it in $script:allItems) {
-        if ($onlyNamed -and -not $it.HasName) { continue }
-        if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) }
-    }
+    foreach ($it in $script:allItems) { if ($onlyNamed -and -not $it.HasName) { continue }; if ($q -eq "" -or $it.Display.ToLower().Contains($q)) { [void]$lst.Items.Add($it.Display) } }
     $lst.EndUpdate()
 }
-function Update-Count { $lblSel.Text="Đã chọn: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($chkOn.Checked -and $script:ready -and $grid.Rows.Count -lt 7) }
+function Update-Count { $lblSel.Text="Đã chọn: $($grid.Rows.Count)/7"; $btnAdd.Enabled=($script:toggleOn -and $script:ready -and $grid.Rows.Count -lt 7) }
 function Set-ItemEnabled {
-    $on=$chkOn.Checked -and $script:ready
+    $on=$script:toggleOn -and $script:ready
     $txtSearch.Enabled=$on; $lst.Enabled=$on; $btnRem.Enabled=$on; $grid.Enabled=$on; $chkNamed.Enabled=$on
-    if ($chkOn.Checked) { $chkOn.Text="BẬT MOD (ON)   -   đang cho chọn item"; $chkOn.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67) }
-    else { $chkOn.Text="MOD ĐANG OFF   -   tích vào để BẬT (ON)"; $chkOn.ForeColor=[System.Drawing.Color]::Firebrick }
+    if ($script:toggleOn) { $lblToggleState.Text="Đang BẬT — chọn item để farm"; $lblToggleState.ForeColor=$cGreen }
+    else { $lblToggleState.Text="Đang TẮT — game farm bình thường"; $lblToggleState.ForeColor=$cGray }
     Update-Count
 }
+function Set-Toggle($on) { $script:toggleOn=$on; $toggle.Invalidate(); Set-ItemEnabled }
 function Find-ItemByDisplay($disp){ foreach($it in $script:allItems){ if($it.Display -eq $disp){return $it} }; return $null }
 function Load-Current {
     $grid.Rows.Clear()
-    if (-not (Test-Path $script:configPath)) { $chkOn.Checked=$true; return }
+    if (-not (Test-Path $script:configPath)) { Set-Toggle $true; return }
     try {
         $raw=[System.IO.File]::ReadAllText($script:configPath); $clean=($raw -split "`n" | Where-Object { $_ -notmatch '^\s*//' }) -join "`n"
         $obj=$clean | ConvertFrom-Json; $cnt=0
         foreach ($d in $obj.Drops) { [void]$grid.Rows.Add((Get-Name $d.ItemId),$d.MinAmount,$d.ItemId); $cnt++ }
-        $chkOn.Checked=($cnt -gt 0)
-    } catch { $chkOn.Checked=$true }
+        Set-Toggle ($cnt -gt 0)
+    } catch { Set-Toggle $true }
 }
 function Write-Config($dropsBody) {
     $json="{`r`n  // Tao boi Palworld Loot Tool. RESTART game de ap dung.`r`n  `"Scope`": `"AllPals`",`r`n  `"IncludeBosses`": true,`r`n  `"IncludeHumans`": false,`r`n  `"IncludeOilRig`": false,`r`n  `"SpecificPals`": [ `"SheepBall`" ],`r`n  `"Drops`": [`r`n" + $dropsBody + "`r`n  ]`r`n}`r`n"
@@ -143,14 +181,15 @@ function Write-Config($dropsBody) {
 }
 function Apply-Path {
     $root=$txtPath.Text.Trim().TrimEnd('\')
-    if ($root -eq "") { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Đường dẫn đang TRỐNG."; [System.Windows.Forms.MessageBox]::Show("Bạn chưa nhập đường dẫn game!","Thiếu đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return }
-    if (Load-Data $root) { $script:gameRoot=$root; try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}; $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - đã nhận diện mod ($($script:allItems.Count) item). Đã lưu đường dẫn."; Refresh-Pool; Load-Current; Set-ItemEnabled }
-    else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="SAI đường dẫn - không thấy mod ở đây."; [System.Windows.Forms.MessageBox]::Show("Đường dẫn không đúng! Không tìm thấy mod CustomizableLootDrops trong:`n$root`n`nHãy chọn đúng thư mục gốc Palworld.","Sai đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled }
+    if ($root -eq "") { $lblPathStat.ForeColor=$cRed; $lblPathStat.Text="Đường dẫn đang TRỐNG."; [System.Windows.Forms.MessageBox]::Show("Bạn chưa nhập đường dẫn game!","Thiếu đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled; return }
+    if (Load-Data $root) { $script:gameRoot=$root; try { [System.IO.File]::WriteAllText($settingsPath,$root,(New-Object System.Text.UTF8Encoding($false))) } catch {}; $lblPathStat.ForeColor=$cGreen; $lblPathStat.Text="✓  Đã nhận diện mod ($($script:allItems.Count) item). Đã lưu đường dẫn."; Refresh-Pool; Load-Current }
+    else { $lblPathStat.ForeColor=$cRed; $lblPathStat.Text="✗  Sai đường dẫn — không thấy mod ở đây."; [System.Windows.Forms.MessageBox]::Show("Đường dẫn không đúng! Không tìm thấy mod CustomizableLootDrops trong:`n$root`n`nHãy chọn đúng thư mục gốc Palworld.","Sai đường dẫn",0,48)|Out-Null; $script:ready=$false; $lst.Items.Clear(); $grid.Rows.Clear(); Set-ItemEnabled }
 }
 
+$toggle.Add_Click({ if ($script:ready) { Set-Toggle (-not $script:toggleOn) } })
+$lblToggleState.Add_Click({ if ($script:ready) { Set-Toggle (-not $script:toggleOn) } })
 $btnBrowse.Add_Click({ $fb=New-Object System.Windows.Forms.FolderBrowserDialog; $fb.Description="Chọn thư mục Palworld"; if (Test-Path $txtPath.Text){$fb.SelectedPath=$txtPath.Text}; if ($fb.ShowDialog() -eq 'OK'){ $txtPath.Text=$fb.SelectedPath; Apply-Path } })
 $btnApplyPath.Add_Click({ Apply-Path })
-$chkOn.Add_CheckedChanged({ Set-ItemEnabled })
 $chkNamed.Add_CheckedChanged({ Refresh-Pool })
 $txtSearch.Add_TextChanged({ Refresh-Pool })
 $lst.Add_DoubleClick({ $btnAdd.PerformClick() })
@@ -165,9 +204,9 @@ $btnAdd.Add_Click({
 $btnRem.Add_Click({ if ($grid.SelectedRows.Count -gt 0) { $grid.Rows.Remove($grid.SelectedRows[0]); Update-Count } })
 $btnSave.Add_Click({
     if (-not $script:ready) { [System.Windows.Forms.MessageBox]::Show("Chưa chọn đúng đường dẫn game (hoặc để trống)! Hãy bấm 'Áp dụng' trước.","Thiếu đường dẫn",0,48)|Out-Null; return }
-    if ($chkOn.Checked) {
+    if ($script:toggleOn) {
         $grid.EndEdit()
-        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod đang ON nhưng chưa chọn item nào.","Chưa chọn item",0,48)|Out-Null; return }
+        if ($grid.Rows.Count -eq 0) { [System.Windows.Forms.MessageBox]::Show("Mod đang BẬT nhưng chưa chọn item nào.","Chưa chọn item",0,48)|Out-Null; return }
         $drops=@()
         foreach ($r in $grid.Rows) {
             $id=[string]$r.Cells[2].Value; $qtyRaw=[string]$r.Cells[1].Value; $qty=0
@@ -175,14 +214,13 @@ $btnSave.Add_Click({
             if ($qty -gt 99999) { $qty=99999 }
             $drops+=('    { "ItemId": "'+$id+'", "Chance": 100.0, "MinAmount": '+$qty+', "MaxAmount": '+$qty+' }')
         }
-        try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblStatus.Text="MOD ON - đã lưu ($($grid.Rows.Count) item). RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod ON - đã lưu $($grid.Rows.Count) item!`n`nRESTART Palworld để áp dụng.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
+        try { Write-Config ($drops -join ",`r`n"); $lblStatus.ForeColor=$cGreen; $lblStatus.Text="✓ MOD BẬT — đã lưu $($grid.Rows.Count) item. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod BẬT — đã lưu $($grid.Rows.Count) item!`n`nRESTART Palworld để áp dụng.","Xong",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
     } else {
-        try { Write-Config ""; $lblStatus.ForeColor=[System.Drawing.Color]::Firebrick; $lblStatus.Text="MOD OFF - game farm bình thường. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod OFF - game farm BÌNH THƯỜNG.`n`nRESTART Palworld để áp dụng.","Đã tắt mod",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
+        try { Write-Config ""; $lblStatus.ForeColor=$cRed; $lblStatus.Text="MOD TẮT — game farm bình thường. RESTART Palworld."; [System.Windows.Forms.MessageBox]::Show("Mod TẮT — game farm BÌNH THƯỜNG.`n`nRESTART Palworld để áp dụng.","Đã tắt mod",0,64)|Out-Null } catch { [System.Windows.Forms.MessageBox]::Show("Lỗi: $($_.Exception.Message)","Lỗi",0,16)|Out-Null }
     }
 })
 
 # ===== Khởi tạo =====
-if (Load-Data $script:gameRoot) { $lblPathStat.ForeColor=[System.Drawing.Color]::FromArgb(46,160,67); $lblPathStat.Text="OK - đã nhận diện mod ($($script:allItems.Count) item)."; Refresh-Pool; Load-Current }
-else { $lblPathStat.ForeColor=[System.Drawing.Color]::Firebrick; $lblPathStat.Text="Chưa thấy mod ở đường dẫn mặc định. Dán đường dẫn rồi bấm 'Áp dụng'." }
-Set-ItemEnabled
+if (Load-Data $script:gameRoot) { $lblPathStat.ForeColor=$cGreen; $lblPathStat.Text="✓  Đã nhận diện mod ($($script:allItems.Count) item)."; Refresh-Pool; Load-Current }
+else { $lblPathStat.ForeColor=$cRed; $lblPathStat.Text="✗  Chưa thấy mod ở đường dẫn mặc định. Dán đường dẫn rồi bấm 'Áp dụng'."; Set-ItemEnabled }
 [void]$form.ShowDialog()
