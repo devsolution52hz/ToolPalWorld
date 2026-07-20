@@ -38,7 +38,7 @@ $script:override = @{
  "ElectricOrgan"="Electric Organ (Cơ Quan Điện)"; "FireOrgan"="Flame Organ (Cơ Quan Lửa)"; "IceOrgan"="Ice Organ (Cơ Quan Băng)"
  "UniqueMaterial_Mothman"="Explosion-Resistant Fiber (từ Silvance)"; "UniqueMaterial_FlowerPrince"="Toxin Filtering Membrane (từ Dandilord)"
  "Venom"="Venom Gland (Tuyến Độc)"; "PalDarkParts"="Dark Fragment (Mảnh Bóng Tối)"; "MeteorDrop"="Meteorite Fragment (Mảnh Thiên Thạch)"
- "CrudeOil"="Crude Oil (Dầu Thô)"; "Bone"="Bone (Xương)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thú"
+ "CrudeOil"="Crude Oil (Dầu Thô)"; "Bone"="Bone (Xương)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thú"; "BeastBone_Ancient"="Ancient Bone (Xương Cổ Đại)"; "Accessory_PPDF_1"="Silvegis Emblem (Phòng thủ +)"
  "PalItem_ToSell_04"="Precious Claw (Móng Vuốt Quý)"; "PalItem_ToSell_05"="Precious Plume (Lông Vũ Quý)"
  "PalGenderReverse"="Pal Reverser (đổi giới tính)"; "WingGlider_Fuel"="Wing Cell (nhiên liệu Wing Pack)"; "BeamLauncherBullet"="Beam Launcher Ammo (đạn Beam)"
  "Eemerald"="Emerald (Ngọc Lục Bảo)"; "Diamond"="Diamond (Kim Cương)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vàng (Tiền)"
@@ -85,7 +85,7 @@ function Get-Category($id) {
     if ($id -match '^(Diamond|Ruby|Sapphire|Eemerald)$') { return "Đá quý" }
     if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant') { return "Giáp & Trang bị" }
     if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple|Grenade' -and $id -notmatch 'Bullet|Blueprint') { return "Vũ khí" }
-    if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|^Bone$|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
+    if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|Bone|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
     return "Khác"
 }
 function New-RoundRect($x,$y,$w,$h,$r) {
