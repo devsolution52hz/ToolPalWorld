@@ -39,6 +39,7 @@ $script:override = @{
  "UniqueMaterial_Mothman"="Explosion-Resistant Fiber (từ Silvance)"; "UniqueMaterial_FlowerPrince"="Toxin Filtering Membrane (từ Dandilord)"
  "Venom"="Venom Gland (Tuyến Độc)"; "PalDarkParts"="Dark Fragment (Mảnh Bóng Tối)"; "MeteorDrop"="Meteorite Fragment (Mảnh Thiên Thạch)"
  "CrudeOil"="Crude Oil (Dầu Thô)"; "Bone"="Bone (Xương)"; "Leather"="Leather (Da)"; "AnimalSkin"="Da Thú"; "BeastBone_Ancient"="Ancient Bone (Xương Cổ Đại)"; "Accessory_PPDF_1"="Silvegis Emblem (Phòng thủ +)"
+ "CaveMushroom"="Cavern Mushroom (Nấm Hang)"; "Berries"="Red Berries (Quả Mọng)"; "PalOil"="Pal Oil (Dầu Pal)"; "PalFluid"="Aquatic Pal Fluids (Dịch Pal)"; "Sweet"="Cotton Candy (Kẹo Bông)"; "Medicines"="Recovery Meds (Thuốc Hồi Máu)"; "LuxuryMedicines"="Advanced Recovery Meds (Thuốc Hồi Cao Cấp)"
  "PalItem_ToSell_04"="Precious Claw (Móng Vuốt Quý)"; "PalItem_ToSell_05"="Precious Plume (Lông Vũ Quý)"
  "PalGenderReverse"="Pal Reverser (đổi giới tính)"; "WingGlider_Fuel"="Wing Cell (nhiên liệu Wing Pack)"; "BeamLauncherBullet"="Beam Launcher Ammo (đạn Beam)"
  "Eemerald"="Emerald (Ngọc Lục Bảo)"; "Diamond"="Diamond (Kim Cương)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vàng (Tiền)"
@@ -83,6 +84,7 @@ function Get-Category($id) {
     if ($id -match '^PalSphere|^KeySphere') { return "Cầu Pal" }
     if ($id -match '^WorkSuitability') { return "Sách kỹ năng" }
     if ($id -match '^(Diamond|Ruby|Sapphire|Eemerald)$') { return "Đá quý" }
+    if (($id -match 'Mushroom|Berr|^PalOil$|^PalFluid$|^Sweet$|Medicine|^Potion|Meat|Soup|Stew|Juice|Cake|Bread|Salad|Pizza|Sandwich|Pancake|Baked|Grilled|Cooked|Milk|^Egg|Honey|Jam|Tomato|Lettuce|Wheat|Flour|Noodle|Ramen|Hamburg|Omelet|Curry|Fish|Vegetable|Fruit_Red|Fruit_Pink|CornSoup|HotSpicy') -and $id -notmatch 'Launcher|Bullet|Blueprint|Skill|Seed') { return "Thực phẩm & Thuốc" }
     if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant') { return "Giáp & Trang bị" }
     if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple|Grenade' -and $id -notmatch 'Bullet|Blueprint') { return "Vũ khí" }
     if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|Bone|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
@@ -147,7 +149,7 @@ $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'
 $chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
 $lblCat=New-Object System.Windows.Forms.Label; $lblCat.Text="Danh mục:"; $lblCat.Location='560,200'; $lblCat.AutoSize=$true; $lblCat.ForeColor=$cDark
 $cboCat=New-Object System.Windows.Forms.ComboBox; $cboCat.Location='632,197'; $cboCat.Size='256,26'; $cboCat.DropDownStyle='DropDownList'
-[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Đặc biệt / Key Items","Khác"))
+[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Thực phẩm & Thuốc","Đặc biệt / Key Items","Khác"))
 $cboCat.SelectedIndex=0
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
