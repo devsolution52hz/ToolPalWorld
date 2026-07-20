@@ -32,6 +32,7 @@ $script:override = @{
  "LaserBullet"="Đạn Laser"; "LaserGatlingBullet"="Đạn Gatling Laser"; "ChargeLaserRifleBullet"="Đạn Súng Laser Sạc"; "ElectricArcAssaultRifleBullet"="Đạn Hồ Quang Điện"; "EnergyLauncherBullet"="Đạn Phóng Năng Lượng"; "EnergyShotgunBullet"="Đạn Shotgun Năng Lượng"; "OverheatRifleBullet"="Đạn Súng Quá Nhiệt (Plasma)"; "PalDopingShotBullet"="Đạn Doping Pal"; "SkyAssaultRifleBullet"="Đạn Súng Trường Đảo Trời"; "SkyShotgunBullet"="Đạn Shotgun Đảo Trời"; "SkySubmachineGunBullet"="Đạn Tiểu Liên Đảo Trời"; "SkyGrenadeLauncherBullet"="Đạn Phóng Lựu Đảo Trời"; "SkyHeavyBullet"="Đạn Nặng Đảo Trời"; "SkyLightBullet"="Đạn Nhẹ Đảo Trời"; "WidePenetrateShotgunBullet"="Đạn Shotgun Xuyên Rộng"
  "Arrow"="Mũi Tên"; "Arrow_Fire"="Mũi Tên Lửa"; "Arrow_Poison"="Mũi Tên Độc"; "ReinforcedArrow"="Mũi Tên Gia Cố"; "SFArrow"="Mũi Tên SF"; "SkyBowArrow"="Mũi Tên Cung Đảo Trời"
  "FragGrenade"="Lựu Đạn (thường)"; "FragGrenade_Fire"="Lựu Đạn Lửa"; "FragGrenade_Ice"="Lựu Đạn Băng"; "FragGrenade_Elec"="Lựu Đạn Sốc Điện (Shock)"; "FragGrenade_Water"="Lựu Đạn Nước"; "FragGrenade_Leaf"="Lựu Đạn Cỏ"; "FragGrenade_Ground"="Lựu Đạn Đất"; "FragGrenade_Dragon"="Lựu Đạn Rồng"; "FragGrenade_Dark"="Lựu Đạn Bóng Tối"; "FragGrenade_Super"="Lựu Đạn Siêu Cấp"; "PalHealingGrenade"="Lựu Đạn Hồi Máu Pal"
+ "WhaleWhistle"="Echoing Flute (triệu hồi Ocean King)"; "WhaleWhistleFragment_01"="Echobone: Marine"; "WhaleWhistleFragment_02"="Echobone: Silent"; "WhaleWhistleFragment_03"="Echobone: Seafoam"; "WhaleWhistleFragment_04"="Echobone: Tidewind"
  "Bio_Battery"="Bio Battery (Pin Sinh Học)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Môi Ăn Mòn)"; "Bio_Coolant"="Cryogenic Coolant (Chất Làm Mát)"
  "Thermal_Core"="Thermal Core (Lõi Nhiệt)"; "AIcore"="AI Core"; "Computer"="Computer (Máy Tính)"
  "ElectricOrgan"="Electric Organ (Cơ Quan Điện)"; "FireOrgan"="Flame Organ (Cơ Quan Lửa)"; "IceOrgan"="Ice Organ (Cơ Quan Băng)"
@@ -72,6 +73,7 @@ function Load-Data($root) {
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
 function Get-Category($id) {
+    if ($id -match '^WhaleWhistle|Echobone|^KeySphere|^Blueprint_.*Boss|Relic_Boss|^SummonItem') { return "Đặc biệt / Key Items" }
     if ($id -match 'Bullet$' -or $id -match 'Arrow') { return "Đạn & Cung tên" }
     if ($id -match 'Ingot$') { return "Thỏi kim loại" }
     if ($id -match 'Ore$' -or $id -match '^(Coal|Sulfur|Quartz|Sand|NightStone|Chromium|Charcoal|StainlessSteel|CrudeOil|Cement|CarbonFiber)$') { return "Quặng & Khoáng" }
@@ -145,7 +147,7 @@ $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'
 $chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
 $lblCat=New-Object System.Windows.Forms.Label; $lblCat.Text="Danh mục:"; $lblCat.Location='560,200'; $lblCat.AutoSize=$true; $lblCat.ForeColor=$cDark
 $cboCat=New-Object System.Windows.Forms.ComboBox; $cboCat.Location='632,197'; $cboCat.Size='256,26'; $cboCat.DropDownStyle='DropDownList'
-[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Khác"))
+[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Đặc biệt / Key Items","Khác"))
 $cboCat.SelectedIndex=0
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
