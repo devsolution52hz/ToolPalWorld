@@ -35,6 +35,7 @@ $script:override = @{
  "WhaleWhistle"="Echoing Flute (triệu hồi Ocean King)"; "WhaleWhistleFragment_01"="Echobone: Marine"; "WhaleWhistleFragment_02"="Echobone: Silent"; "WhaleWhistleFragment_03"="Echobone: Seafoam"; "WhaleWhistleFragment_04"="Echobone: Tidewind"
  "Blueprint_YakushimaBlade003"="Terraprisma Schematic (Bản vẽ Terraria)"; "Blueprint_YakushimaBlade002"="Bản vẽ Terraria - Kiếm A"; "Blueprint_YakushimaBlade004"="Bản vẽ Terraria - Kiếm C"; "Blueprint_YakushimaGun001"="Bản vẽ Terraria - Súng"; "Blueprint_YakushimaHeadEquip001"="Bản vẽ Terraria - Mũ 1"; "Blueprint_YakushimaHeadEquip002"="Bản vẽ Terraria - Mũ 2"; "Blueprint_YakushimaHeadEquip003"="Bản vẽ Terraria - Mũ 3"; "Blueprint_YakushimaHeadEquip004"="Bản vẽ Terraria - Mũ 4"; "Blueprint_YakushimaLantern001"="Bản vẽ Terraria - Đèn"
  "YakushimaBlade003"="Terraprisma (kiếm Terraria)"; "YakushimaGun001"="Súng Terraria"; "Elixir_hp_Yakushima"="Elixir HP (Yakushima)"
+ "YakushimaIngot001"="Hallowed Bar (Thanh Thánh - Terraria)"; "YakushimaIngot002"="Luminite Bar (drop Moon Lord - Terraria)"
  "Bio_Battery"="Bio Battery (Pin Sinh Học)"; "Corrosive_Solvent"="Corrosive Solvent (Dung Môi Ăn Mòn)"; "Bio_Coolant"="Cryogenic Coolant (Chất Làm Mát)"
  "Thermal_Core"="Thermal Core (Lõi Nhiệt)"; "AIcore"="AI Core"; "Computer"="Computer (Máy Tính)"
  "ElectricOrgan"="Electric Organ (Cơ Quan Điện)"; "FireOrgan"="Flame Organ (Cơ Quan Lửa)"; "IceOrgan"="Ice Organ (Cơ Quan Băng)"
@@ -76,6 +77,7 @@ function Load-Data($root) {
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
 function Get-Category($id) {
+    if ($id -match 'Yakushima') { return "Terraria" }
     if ($id -match '^WhaleWhistle|Echobone|^KeySphere|^Blueprint_.*Boss|Relic_Boss|^SummonItem') { return "Đặc biệt / Key Items" }
     if ($id -match 'Bullet$' -or $id -match 'Arrow') { return "Đạn & Cung tên" }
     if ($id -match 'Ingot$') { return "Thỏi kim loại" }
