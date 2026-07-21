@@ -110,6 +110,18 @@ function Get-Category($id) {
     if ($id -match 'Organ$|Fragment|^UniqueMaterial|^PalDarkParts|^Venom$|Bone|^Leather$|^AnimalSkin$|^Wool$|^Wood|^WorldTreeRelic|^AncientParts|^PalCrystal|^MeteorDrop$|^Cloth|^Bio_|^Thermal_Core$|^AIcore$|^Computer$|^ElectronicCircuit$|^WorldTreeHolyWater$|^Horn$|^PalItem_') { return "Nguyên liệu Pal" }
     return "Khác"
 }
+# Trang bi (vu khi/giap/do Terraria) KHONG stack -> so luong lon gay lag/dung hinh. Khoa toi da = 1.
+function Test-Equip($id) {
+    if ($id -match '^Yakushima(Blade|Gun|Lantern|Armor|HeadEquip)') { return $true }
+    if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow$|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple' -and $id -notmatch 'Bullet|Blueprint') { return $true }
+    if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant' -and $id -notmatch 'Blueprint|Fuel') { return $true }
+    return $false
+}
+function Get-MaxQty($id) {
+    if (Test-Equip $id) { return 1 }
+    if ($id -eq "Money") { return 10000000 }
+    return 9999
+}
 function New-RoundRect($x,$y,$w,$h,$r) {
     $p=New-Object System.Drawing.Drawing2D.GraphicsPath; $d=$r*2
     $p.AddArc($x,$y,$d,$d,180,90); $p.AddArc($x+$w-$d,$y,$d,$d,270,90); $p.AddArc($x+$w-$d,$y+$h-$d,$d,$d,0,90); $p.AddArc($x,$y+$h-$d,$d,$d,90,90); $p.CloseFigure(); return $p
@@ -253,7 +265,8 @@ $btnAdd.Add_Click({
     $it=Find-ItemByDisplay $lst.SelectedItem; if ($null -eq $it) { return }
     foreach ($r in $grid.Rows) { if ($r.Cells[2].Value -eq $it.Id) { return } }
     $dispName=if($it.Name){$it.Name}else{$it.Id}
-    [void]$grid.Rows.Add($dispName,9999,$it.Id); Update-Count
+    $defQty=if(Test-Equip $it.Id){1}else{9999}
+    [void]$grid.Rows.Add($dispName,$defQty,$it.Id); Update-Count
 })
 $btnRem.Add_Click({ if ($grid.SelectedRows.Count -gt 0) { $grid.Rows.Remove($grid.SelectedRows[0]); Update-Count } })
 $grid.Add_CellEndEdit({
@@ -261,7 +274,7 @@ $grid.Add_CellEndEdit({
     if ($e.ColumnIndex -ne 1) { return }
     $row=$grid.Rows[$e.RowIndex]; $id=[string]$row.Cells[2].Value; $raw=[string]$row.Cells[1].Value; $q=0
     if (-not [int]::TryParse($raw,[ref]$q) -or $q -lt 1) { $row.Cells[1].Value=1; return }
-    $max = if ($id -eq "Money") { 10000000 } else { 9999 }
+    $max = Get-MaxQty $id
     if ($q -gt $max) { $q=$max }
     $row.Cells[1].Value=$q
 })
@@ -274,7 +287,7 @@ $btnSave.Add_Click({
         foreach ($r in $grid.Rows) {
             $id=[string]$r.Cells[2].Value; $qtyRaw=[string]$r.Cells[1].Value; $qty=0
             if (-not [int]::TryParse($qtyRaw,[ref]$qty) -or $qty -lt 1) { [System.Windows.Forms.MessageBox]::Show("Số lượng không hợp lệ: $($r.Cells[0].Value)","Lỗi",0,48)|Out-Null; return }
-            $max = if ($id -eq "Money") { 10000000 } else { 9999 }
+            $max = Get-MaxQty $id
             if ($qty -gt $max) { $qty=$max; $r.Cells[1].Value=$qty }
             if ($qty -ge 1000) { $hasBig=$true }
             $drops+=('    { "ItemId": "'+$id+'", "Chance": 100.0, "MinAmount": '+$qty+', "MaxAmount": '+$qty+' }')
