@@ -116,7 +116,7 @@ $script:accBase = @{
 $script:bagBase = @{
  "AutoMealPouch_Tier1"="Túi Ăn Tự Động cấp 1"; "AutoMealPouch_Tier2"="Túi Ăn Tự Động cấp 2"; "AutoMealPouch_Tier3"="Túi Ăn Tự Động cấp 3"; "AutoMealPouch_Tier4"="Túi Ăn Tự Động cấp 4"; "AutoMealPouch_Tier5"="Túi Ăn Tự Động cấp 5"
  "AdditionalInventory_001"="Túi Mở Rộng Đồ / Balo cấp 1"; "AdditionalInventory_002"="Túi Mở Rộng Đồ / Balo cấp 2"; "AdditionalInventory_003"="Túi Mở Rộng Đồ / Balo cấp 3"; "AdditionalInventory_004"="Túi Mở Rộng Đồ / Balo cấp 4"
- "UnlockEquipmentSlot_Accessory_01"="Mở Khóa Ô Phụ Kiện 1"; "UnlockEquipmentSlot_Accessory_02"="Mở Khóa Ô Phụ Kiện 2"; "UnlockEquipmentSlot_Weapon_01"="Mở Khóa Ô Vũ Khí 1"; "UnlockEquipmentSlot_Weapon_02"="Mở Khóa Ô Vũ Khí 2"
+ "UnlockEquipmentSlot_Accessory_01"="Mở Thêm 1 Ô Phụ Kiện (bộ #1 — game chỉ có 2)"; "UnlockEquipmentSlot_Accessory_02"="Mở Thêm 1 Ô Phụ Kiện (bộ #2 — game chỉ có 2)"; "UnlockEquipmentSlot_Weapon_01"="Mở Thêm 1 Ô Vũ Khí (bộ #1)"; "UnlockEquipmentSlot_Weapon_02"="Mở Thêm 1 Ô Vũ Khí (bộ #2)"
 }
 
 $script:allItems=New-Object System.Collections.ArrayList
