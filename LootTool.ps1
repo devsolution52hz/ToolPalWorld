@@ -68,6 +68,21 @@ $script:override = @{
  "AncientTechnologyBook_G1"="Ancient Tech Manual (điểm KT cổ)"; "TechnologyBook_G1"="Technology Manual (điểm kỹ thuật)"; "TechnologyBook_G2"="Technology Manual II"; "TechnologyBook_G3"="Technology Manual III"
 }
 
+# ===== Vu khi goc Palworld (ban _2.._5 = ☆2..☆5, Blueprint_ = ban ve — tu sinh ten qua Resolve-DynamicName) =====
+$script:weaponBase = @{
+ "Bat"="Gậy Gỗ (Bat)"; "Bat2"="Gậy Sắt (Bat II)"; "Bat3"="Gậy Đinh (Nail Bat)"
+ "Sword"="Kiếm Cũ (Sword)"; "BronzeSword"="Kiếm Đồng (Bronze Sword)"; "BeamSword"="Kiếm Laser (Beam Sword)"; "SkyBeamSword"="Kiếm Laser Đảo Trời (Sky Beam Sword)"; "Katana"="Katana"; "ElecBaton"="Dùi Cui Điện (Electric Baton)"
+ "Spear"="Giáo (Spear)"; "Spear_ForestBoss"="Giáo Rừng (Forest Boss Spear)"; "Spear_ForestBoss2"="Giáo Rừng II (Forest Boss Spear II)"; "Spear_QueenBee"="Giáo Ong Chúa (Queen Bee Spear)"; "Spear_SoldierBee"="Giáo Ong Lính (Soldier Bee Spear)"
+ "HandGun_Default"="Súng Lục (Handgun)"; "MakeshiftHandgun"="Súng Lục Tự Chế (Makeshift Handgun)"; "OldRevolver"="Ổ Quay Cũ (Old Revolver)"; "OctaviaRevolver"="Ổ Quay Octavia (Octavia Revolver)"; "HandgunShield"="Khiên Súng Lục (Handgun Shield)"
+ "AssaultRifle_Default"="Súng Trường Tấn Công (Assault Rifle)"; "MakeshiftAssaultRifle"="Súng Trường Tự Chế (Makeshift AR)"; "SemiAutoRifle"="Súng Trường Bán Tự Động (Semi-Auto Rifle)"; "SingleShotRifle"="Súng Trường Bắn Phát Một (Single Shot Rifle)"; "Musket"="Súng Hỏa Mai (Musket)"; "OverheatRifle"="Súng Trường Quá Nhiệt / Plasma (Overheat Rifle)"; "SkyAssaultRifle"="Súng Trường Đảo Trời (Sky Assault Rifle)"; "ElectricArcAssaultRifle"="Súng Trường Hồ Quang Điện (Electric Arc AR)"; "LaserRifle"="Súng Laser (Laser Rifle)"; "ChargeLaserRifle"="Súng Laser Sạc (Charge Laser Rifle)"; "SniperRifle_Default"="Súng Bắn Tỉa (Sniper Rifle)"
+ "MakeshiftShotgun"="Shotgun Tự Chế (Makeshift Shotgun)"; "PumpActionShotgun"="Shotgun Bơm (Pump-Action Shotgun)"; "DoubleBarrelShotgun"="Shotgun 2 Nòng (Double-Barrel Shotgun)"; "SemiAutoShotgun"="Shotgun Bán Tự Động (Semi-Auto Shotgun)"; "EnergyShotgun"="Shotgun Năng Lượng (Energy Shotgun)"; "WidePenetrateShotgun"="Shotgun Xuyên Rộng (Wide-Penetrate Shotgun)"; "SkyShotgun"="Shotgun Đảo Trời (Sky Shotgun)"; "OctaviaShotgun"="Shotgun Octavia (Octavia Shotgun)"
+ "SubmachineGun"="Tiểu Liên (Submachine Gun)"; "MakeshiftSubmachineGun"="Tiểu Liên Tự Chế (Makeshift SMG)"; "SkySubmachineGun"="Tiểu Liên Đảo Trời (Sky SMG)"
+ "GatlingGun"="Súng Gatling (Gatling Gun)"; "LaserGatlingGun"="Súng Gatling Laser (Laser Gatling Gun)"
+ "Launcher_Default"="Bệ Phóng Tên Lửa (Rocket Launcher)"; "GrenadeLauncher"="Súng Phóng Lựu (Grenade Launcher)"; "SkyGrenadeLauncher"="Súng Phóng Lựu Đảo Trời (Sky Grenade Launcher)"; "GuidedMissileLauncher"="Bệ Phóng Tên Lửa Dẫn Đường (Guided Missile Launcher)"; "MultiGuidedMissileLauncher"="Bệ Phóng Tên Lửa Đa Nòng (Multi Guided Missile Launcher)"; "EnergyRocketLauncher"="Bệ Phóng Rocket Năng Lượng (Energy Rocket Launcher)"; "DroneLauncher"="Bệ Phóng Drone (Drone Launcher)"; "BeamLauncher"="Bệ Phóng Beam (Beam Launcher)"; "Launcher_Meteor"="Bệ Phóng Thiên Thạch (Meteor Launcher)"; "SphereLauncher"="Bệ Phóng Cầu Pal (Sphere Launcher)"; "PenguinLauncher"="Bệ Phóng Chim Cánh Cụt (Penguin Launcher)"; "Launcher_Meat"="Bệ Phóng Thịt (Meat Launcher)"; "HomingSphereLauncher"="Bệ Phóng Cầu Dẫn Đường (Homing Sphere Launcher)"
+ "WeakerBow"="Cung Yếu (Weaker Bow)"; "RecurveBow"="Cung Cong (Recurve Bow)"; "CompoundBow"="Cung Ghép (Compound Bow)"; "SFBow"="Cung SF (SF Bow)"; "SkyBow"="Cung Đảo Trời (Sky Bow)"; "BowGun"="Nỏ (Crossbow)"; "BowGun_Fire"="Nỏ Lửa (Fire Crossbow)"; "BowGun_Poison"="Nỏ Độc (Poison Crossbow)"; "Bow_Fire"="Cung Lửa (Fire Bow)"; "Bow_Poison"="Cung Độc (Poison Bow)"; "Bow_Triple"="Cung Ba Mũi (Triple Bow)"; "Bow_Fifth"="Cung Năm Mũi (Fifth Bow)"
+ "FlameThrower"="Súng Phun Lửa (Flamethrower)"
+}
+
 $script:allItems=New-Object System.Collections.ArrayList
 $script:names=@{}; $script:nameOf=@{}; $script:configPath=""; $script:ready=$false; $script:toggleOn=$true
 
@@ -84,6 +99,7 @@ function Load-Data($root) {
     foreach ($id in ($valid.Keys | Sort-Object)) {
         $nm=""
         if ($script:override.ContainsKey($id)) { $nm=$script:override[$id] }
+        elseif (($dyn=Resolve-DynamicName $id)) { $nm=$dyn }
         elseif ($script:names.ContainsKey($id) -and $script:names[$id] -ne "Unknown") { $nm=$script:names[$id] }
         $script:nameOf[$id]=$nm; $has=[bool]$nm
         $disp=if ($nm) { "$nm  [$id]" } else { $id }
@@ -92,8 +108,23 @@ function Load-Data($root) {
     $script:ready=$true; return $true
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
+# Tu sinh ten cho vu khi goc + ban ve theo hau to _2.._5 (☆) va tien to Blueprint_
+function Resolve-DynamicName($id) {
+    $bp=$false; $core=$id
+    if ($core -match '^Blueprint_(.+)$') { $bp=$true; $core=$matches[1] }
+    $star=''
+    if ($core -match '^(.+)_([2-5])$') { $core=$matches[1]; $star=' ☆'+$matches[2] }
+    if ($script:weaponBase.ContainsKey($core)) {
+        $nm=$script:weaponBase[$core]+$star
+        if ($bp) { $nm='Bản vẽ '+$nm }
+        return $nm
+    }
+    return ''
+}
 function Get-Category($id) {
     if ($id -match 'Yakushima') { return "Terraria" }
+    if ($id -match '^Blueprint_(.+)$') { $bc=$matches[1] -replace '_[2-5]$',''; if ($script:weaponBase.ContainsKey($bc)) { return "Bản vẽ (Blueprint)" } }
+    $wc=$id -replace '_[2-5]$',''; if ($script:weaponBase.ContainsKey($wc)) { return "Vũ khí" }
     if ($id -match '^WhaleWhistle|Echobone|^KeySphere|^Blueprint_.*Boss|Relic_Boss|^SummonItem') { return "Đặc biệt / Key Items" }
     if ($id -match 'Bullet$' -or $id -match 'Arrow') { return "Đạn & Cung tên" }
     if ($id -match 'Ingot$') { return "Thỏi kim loại" }
@@ -112,9 +143,11 @@ function Get-Category($id) {
 }
 # Trang bi (vu khi/giap/do Terraria) KHONG stack -> so luong lon gay lag/dung hinh. Khoa toi da = 1.
 function Test-Equip($id) {
+    if ($id -match '^Blueprint_') { return $false }   # ban ve co the stack -> khong khoa
     if ($id -match '^Yakushima(Blade|Gun|Lantern|Armor|HeadEquip)') { return $true }
-    if ($id -match 'Rifle|Handgun|Shotgun|Launcher|Sword|_Bow$|Gatling|Spear|Crossbow|Pickaxe|_Axe|Hammer|Flamethrower|Musket|Knuckle|Grapple' -and $id -notmatch 'Bullet|Blueprint') { return $true }
-    if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant' -and $id -notmatch 'Blueprint|Fuel') { return $true }
+    $core=$id; if ($core -match '^(.+)_([2-5])$') { $core=$matches[1] }
+    if ($script:weaponBase.ContainsKey($core)) { return $true }   # vu khi goc + moi bac ☆
+    if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant' -and $id -notmatch 'Fuel') { return $true }
     return $false
 }
 function Get-MaxQty($id) {
@@ -181,7 +214,7 @@ $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'
 $chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
 $lblCat=New-Object System.Windows.Forms.Label; $lblCat.Text="Danh mục:"; $lblCat.Location='560,200'; $lblCat.AutoSize=$true; $lblCat.ForeColor=$cDark
 $cboCat=New-Object System.Windows.Forms.ComboBox; $cboCat.Location='632,197'; $cboCat.Size='256,26'; $cboCat.DropDownStyle='DropDownList'
-[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Terraria","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Thực phẩm & Thuốc","Đặc biệt / Key Items","Khác"))
+[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Bản vẽ (Blueprint)","Terraria","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Thực phẩm & Thuốc","Đặc biệt / Key Items","Khác"))
 $cboCat.SelectedIndex=0
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
