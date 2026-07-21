@@ -83,6 +83,42 @@ $script:weaponBase = @{
  "FlameThrower"="Súng Phun Lửa (Flamethrower)"
 }
 
+# ===== Phu kien (accessory) — map full ID; Blueprint tu sinh qua Resolve-DynamicName =====
+$script:accBase = @{
+ "Accessory_AT_1"="Bùa Tấn Công I"; "Accessory_AT_2"="Bùa Tấn Công II"; "Accessory_AT_3"="Bùa Tấn Công III"
+ "Accessory_HP_1"="Bùa Máu I"; "Accessory_HP_2"="Bùa Máu II"; "Accessory_HP_3"="Bùa Máu III"
+ "Accessory_defense_1"="Bùa Phòng Thủ I"; "Accessory_defense_2"="Bùa Phòng Thủ II"; "Accessory_defense_3"="Bùa Phòng Thủ III"
+ "Accessory_WorkSpeed_1"="Bùa Tốc Độ Làm Việc I"; "Accessory_WorkSpeed_2"="Bùa Tốc Độ Làm Việc II"; "Accessory_WorkSpeed_3"="Bùa Tốc Độ Làm Việc III"
+ "Accessory_MaxWeightUp_01"="Bùa Tăng Tải Trọng I"; "Accessory_MaxWeightUp_02"="Bùa Tăng Tải Trọng II"; "Accessory_MaxWeightUp_03"="Bùa Tăng Tải Trọng III"
+ "Accessory_AirDash1"="Bùa Lướt Không I"; "Accessory_AirDash2"="Bùa Lướt Không II"; "Accessory_AirDash3"="Bùa Lướt Không III"; "Accessory_AirDash4"="Bùa Lướt Không IV"
+ "Accessory_JumpAir_1"="Bùa Nhảy Không I"; "Accessory_JumpAir_2"="Bùa Nhảy Không II"; "Accessory_SuperJumpAir_1"="Bùa Siêu Nhảy Không I"; "Accessory_SuperJumpAir_2"="Bùa Siêu Nhảy Không II"
+ "Accessory_JumpCount_Increase1"="Bùa Tăng Lần Nhảy I"; "Accessory_JumpCount_Increase2"="Bùa Tăng Lần Nhảy II"; "Accessory_JumpCount_Increase3"="Bùa Tăng Lần Nhảy III"; "Accessory_JumpPower_Increase"="Bùa Tăng Lực Nhảy"; "Accessory_Avoid_1"="Bùa Né Đòn"
+ "Accessory_FireResist_1"="Bùa Kháng Lửa I"; "Accessory_FireResist_2"="Bùa Kháng Lửa II"; "Accessory_FireResist_3"="Bùa Kháng Lửa III"
+ "Accessory_IceResist_1"="Bùa Kháng Băng I"; "Accessory_IceResist_2"="Bùa Kháng Băng II"; "Accessory_IceResist_3"="Bùa Kháng Băng III"
+ "Accessory_ThunderResist_1"="Bùa Kháng Sét I"; "Accessory_ThunderResist_2"="Bùa Kháng Sét II"; "Accessory_ThunderResist_3"="Bùa Kháng Sét III"
+ "Accessory_EarthResist_1"="Bùa Kháng Đất I"; "Accessory_EarthResist_2"="Bùa Kháng Đất II"; "Accessory_EarthResist_3"="Bùa Kháng Đất III"
+ "Accessory_LeafResist_1"="Bùa Kháng Cỏ I"; "Accessory_LeafResist_2"="Bùa Kháng Cỏ II"; "Accessory_LeafResist_3"="Bùa Kháng Cỏ III"
+ "Accessory_DarkResist_1"="Bùa Kháng Bóng Tối I"; "Accessory_DarkResist_2"="Bùa Kháng Bóng Tối II"; "Accessory_DarkResist_3"="Bùa Kháng Bóng Tối III"
+ "Accessory_DragonResist_1"="Bùa Kháng Rồng I"; "Accessory_DragonResist_2"="Bùa Kháng Rồng II"; "Accessory_DragonResist_3"="Bùa Kháng Rồng III"
+ "Accessory_NormalResist_1"="Bùa Kháng Thường I"; "Accessory_NormalResist_2"="Bùa Kháng Thường II"; "Accessory_NormalResist_3"="Bùa Kháng Thường III"
+ "Accessory_AquaResist_1"="Bùa Kháng Nước I"; "Accessory_AquaResist_2"="Bùa Kháng Nước II"; "Accessory_AquaResist_3"="Bùa Kháng Nước III"
+ "Accessory_HeatResist_1"="Bùa Chịu Nóng I (môi trường)"; "Accessory_HeatResist_2"="Bùa Chịu Nóng II"; "Accessory_HeatResist_3"="Bùa Chịu Nóng III"
+ "Accessory_CoolResist_1"="Bùa Chịu Lạnh I (môi trường)"; "Accessory_CoolResist_2"="Bùa Chịu Lạnh II"; "Accessory_CoolResist_3"="Bùa Chịu Lạnh III"
+ "Accessory_HeatColdResist_1"="Bùa Chịu Nóng-Lạnh I"; "Accessory_HeatColdResist_2"="Bùa Chịu Nóng-Lạnh II"; "Accessory_HeatColdResist_3"="Bùa Chịu Nóng-Lạnh III"
+ "Accessory_ExplosionResist"="Bùa Kháng Nổ"; "Accessory_ColdIce_1"="Bùa Chịu Lạnh (Cold)"; "Accessory_HeatFire_1"="Bùa Chịu Nóng (Heat)"
+ "Accessory_DFHP_1"="Bùa Phòng Thủ + Máu"; "Accessory_HCHP_1"="Bùa Cao Cấp: Máu"; "Accessory_HCMW_1"="Bùa Cao Cấp: Tải Trọng"; "Accessory_WKMC_1"="Bùa Cao Cấp: Làm Việc"; "Accessory_PPAT_1"="Bùa Tấn Công Pal +"; "Accessory_PPDF_1"="Silvegis Emblem (Phòng thủ +)"
+ "Accessory_Nonkilling"="Bùa Không Giết (bắt Pal an toàn)"; "Accessory_NonkChecker_1"="Kính Xem Máu Pal (khi bắt)"; "Accessory_TalentChecker"="Kính Xem Chỉ Số Pal (IV)"
+ "Accessory_Otomo_Fire_1"="Bùa Cường Hóa Pal hệ Lửa I"; "Accessory_Otomo_Fire_2"="Bùa Cường Hóa Pal hệ Lửa II"; "Accessory_Otomo_Water_1"="Bùa Cường Hóa Pal hệ Nước"; "Accessory_Otomo_Ice_1"="Bùa Cường Hóa Pal hệ Băng"; "Accessory_Otomo_Leaf_1"="Bùa Cường Hóa Pal hệ Cỏ"; "Accessory_Otomo_Earth_1"="Bùa Cường Hóa Pal hệ Đất"; "Accessory_Otomo_Electricity_1"="Bùa Cường Hóa Pal hệ Điện"; "Accessory_Otomo_Dark_1"="Bùa Cường Hóa Pal hệ Bóng Tối"; "Accessory_Otomo_Dargon_1"="Bùa Cường Hóa Pal hệ Rồng"
+ "ClawsPendant"="Dây Chuyền Móng Vuốt (Claws Pendant)"; "FangNecklace"="Dây Chuyền Nanh (Fang Necklace)"; "NightVisionGoggles"="Kính Nhìn Đêm (Night Vision Goggles)"
+}
+
+# ===== Tui & Mo rong o (bag / slot unlock) — chi can 1 cai =====
+$script:bagBase = @{
+ "AutoMealPouch_Tier1"="Túi Ăn Tự Động cấp 1"; "AutoMealPouch_Tier2"="Túi Ăn Tự Động cấp 2"; "AutoMealPouch_Tier3"="Túi Ăn Tự Động cấp 3"; "AutoMealPouch_Tier4"="Túi Ăn Tự Động cấp 4"; "AutoMealPouch_Tier5"="Túi Ăn Tự Động cấp 5"
+ "AdditionalInventory_001"="Túi Mở Rộng Đồ / Balo cấp 1"; "AdditionalInventory_002"="Túi Mở Rộng Đồ / Balo cấp 2"; "AdditionalInventory_003"="Túi Mở Rộng Đồ / Balo cấp 3"; "AdditionalInventory_004"="Túi Mở Rộng Đồ / Balo cấp 4"
+ "UnlockEquipmentSlot_Accessory_01"="Mở Khóa Ô Phụ Kiện 1"; "UnlockEquipmentSlot_Accessory_02"="Mở Khóa Ô Phụ Kiện 2"; "UnlockEquipmentSlot_Weapon_01"="Mở Khóa Ô Vũ Khí 1"; "UnlockEquipmentSlot_Weapon_02"="Mở Khóa Ô Vũ Khí 2"
+}
+
 $script:allItems=New-Object System.Collections.ArrayList
 $script:names=@{}; $script:nameOf=@{}; $script:configPath=""; $script:ready=$false; $script:toggleOn=$true
 
@@ -108,23 +144,34 @@ function Load-Data($root) {
     $script:ready=$true; return $true
 }
 function Get-Name($id) { if ($script:nameOf.ContainsKey($id) -and $script:nameOf[$id]) { return $script:nameOf[$id] } return $id }
-# Tu sinh ten cho vu khi goc + ban ve theo hau to _2.._5 (☆) va tien to Blueprint_
+# Tu sinh ten cho vu khi/phu kien/tui goc + ban ve (Blueprint_ = "Bản vẽ …", hau to _2.._5 vu khi = ☆)
+function Resolve-AccName($core) {
+    if ($script:accBase.ContainsKey($core)) { return $script:accBase[$core] }
+    $c=$core -replace '_fix$',''
+    if ($script:accBase.ContainsKey($c)) { return $script:accBase[$c] }
+    if ($c -match '^(.+)_[0-9]+$' -and $script:accBase.ContainsKey($matches[1])) { return $script:accBase[$matches[1]] }
+    return ''
+}
 function Resolve-DynamicName($id) {
     $bp=$false; $core=$id
     if ($core -match '^Blueprint_(.+)$') { $bp=$true; $core=$matches[1] }
-    $star=''
-    if ($core -match '^(.+)_([2-5])$') { $core=$matches[1]; $star=' ☆'+$matches[2] }
-    if ($script:weaponBase.ContainsKey($core)) {
-        $nm=$script:weaponBase[$core]+$star
-        if ($bp) { $nm='Bản vẽ '+$nm }
-        return $nm
-    }
+    # Vu khi (hau to _2.._5 = ☆)
+    $wc=$core; $star=''
+    if ($wc -match '^(.+)_([2-5])$' -and $script:weaponBase.ContainsKey($matches[1])) { $wc=$matches[1]; $star=' ☆'+$matches[2] }
+    if ($script:weaponBase.ContainsKey($wc)) { $nm=$script:weaponBase[$wc]+$star; if ($bp) { $nm='Bản vẽ '+$nm }; return $nm }
+    # Phu kien
+    $an=Resolve-AccName $core
+    if ($an) { if ($bp) { $an='Bản vẽ '+$an }; return $an }
+    # Tui / mo rong o
+    if ($script:bagBase.ContainsKey($core)) { $nm=$script:bagBase[$core]; if ($bp) { $nm='Bản vẽ '+$nm }; return $nm }
     return ''
 }
 function Get-Category($id) {
     if ($id -match 'Yakushima') { return "Terraria" }
-    if ($id -match '^Blueprint_(.+)$') { $bc=$matches[1] -replace '_[2-5]$',''; if ($script:weaponBase.ContainsKey($bc)) { return "Bản vẽ (Blueprint)" } }
+    if ($id -match '^Blueprint_' -and (Resolve-DynamicName $id)) { return "Bản vẽ (Blueprint)" }
     $wc=$id -replace '_[2-5]$',''; if ($script:weaponBase.ContainsKey($wc)) { return "Vũ khí" }
+    if ($script:accBase.ContainsKey($id)) { return "Phụ kiện" }
+    if ($script:bagBase.ContainsKey($id)) { return "Túi & Mở rộng ô" }
     if ($id -match '^WhaleWhistle|Echobone|^KeySphere|^Blueprint_.*Boss|Relic_Boss|^SummonItem') { return "Đặc biệt / Key Items" }
     if ($id -match 'Bullet$' -or $id -match 'Arrow') { return "Đạn & Cung tên" }
     if ($id -match 'Ingot$') { return "Thỏi kim loại" }
@@ -147,6 +194,8 @@ function Test-Equip($id) {
     if ($id -match '^Yakushima(Blade|Gun|Lantern|Armor|HeadEquip)') { return $true }
     $core=$id; if ($core -match '^(.+)_([2-5])$') { $core=$matches[1] }
     if ($script:weaponBase.ContainsKey($core)) { return $true }   # vu khi goc + moi bac ☆
+    if ($script:accBase.ContainsKey($id)) { return $true }        # phu kien (khong stack)
+    if ($script:bagBase.ContainsKey($id)) { return $true }        # tui / mo rong o (chi can 1)
     if ($id -match 'Armor|Helmet|Shield|Glider|Accessory|Pendant' -and $id -notmatch 'Fuel') { return $true }
     return $false
 }
@@ -214,7 +263,7 @@ $txtSearch=New-Object System.Windows.Forms.TextBox; $txtSearch.Location='86,197'
 $chkNamed=New-Object System.Windows.Forms.CheckBox; $chkNamed.Text="Chỉ hiện item có tên"; $chkNamed.Location='400,199'; $chkNamed.AutoSize=$true; $chkNamed.Checked=$true; $chkNamed.ForeColor=$cDark
 $lblCat=New-Object System.Windows.Forms.Label; $lblCat.Text="Danh mục:"; $lblCat.Location='560,200'; $lblCat.AutoSize=$true; $lblCat.ForeColor=$cDark
 $cboCat=New-Object System.Windows.Forms.ComboBox; $cboCat.Location='632,197'; $cboCat.Size='256,26'; $cboCat.DropDownStyle='DropDownList'
-[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Bản vẽ (Blueprint)","Terraria","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Thực phẩm & Thuốc","Đặc biệt / Key Items","Khác"))
+[void]$cboCat.Items.AddRange(@("Tất cả","Quặng & Khoáng","Thỏi kim loại","Đạn & Cung tên","Vũ khí","Bản vẽ (Blueprint)","Phụ kiện","Túi & Mở rộng ô","Terraria","Giáp & Trang bị","Nguyên liệu Pal","Đá Thức Tỉnh","Nâng cấp Pal","Cầu Pal","Sách kỹ năng","Đá quý","Thực phẩm & Thuốc","Đặc biệt / Key Items","Khác"))
 $cboCat.SelectedIndex=0
 
 $lst=New-Object System.Windows.Forms.ListBox; $lst.Location='18,230'; $lst.Size='450,412'; $lst.BorderStyle='FixedSingle'; $lst.Font=New-Object System.Drawing.Font("Segoe UI",9)
