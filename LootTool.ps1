@@ -64,7 +64,8 @@ $script:override = @{
  "Eemerald"="Emerald (Ngọc Lục Bảo)"; "Diamond"="Diamond (Kim Cương)"; "Ruby"="Ruby"; "Sapphire"="Sapphire"; "Money"="Vàng (Tiền)"
  "WorkSuitability_AddTicket_MonsterFarm"="Sách Ranching (nuôi Pal)"; "WorkSuitability_AddTicket_Watering"="Sách Watering (tưới nước)"; "WorkSuitability_AddTicket_Seeding"="Sách Planting (trồng cây)"; "WorkSuitability_AddTicket_Collection"="Sách Gathering (thu thập)"; "WorkSuitability_AddTicket_Deforest"="Sách Lumbering (đốn gỗ)"; "WorkSuitability_AddTicket_Mining"="Sách Mining (khai thác)"; "WorkSuitability_AddTicket_EmitFlame"="Sách Kindling (đốt lửa)"; "WorkSuitability_AddTicket_Handcraft"="Sách Handiwork (thủ công)"; "WorkSuitability_AddTicket_Cool"="Sách Cooling (làm mát)"; "WorkSuitability_AddTicket_ProductMedicine"="Sách Medicine (chế thuốc)"; "WorkSuitability_AddTicket_Transport"="Sách Transporting (vận chuyển)"; "WorkSuitability_AddTicket_GenerateElectricity"="Sách Generating Electricity (phát điện)"
  "PalSphere"="Pal Sphere"; "PalSphere_Mega"="Mega Sphere"; "PalSphere_Giga"="Giga Sphere"; "PalSphere_Master"="Master Sphere"; "PalSphere_Legend"="Legendary Sphere"; "PalSphere_Ultimate"="Ultimate Sphere"; "PalSphere_Ancient_1"="Ancient Sphere I"; "PalSphere_Ancient_2"="Ancient Sphere II"
- "PAL_Growth_Stone_S"="Đá Tăng Trưởng Pal S"; "PAL_Growth_Stone_M"="Đá Tăng Trưởng Pal M"; "PAL_Growth_Stone_L"="Đá Tăng Trưởng Pal L"; "PAL_Growth_Stone_XL"="Đá Tăng Trưởng Pal XL"
+ "PAL_Growth_Stone_S"="Đá Tăng Trưởng Pal S (lên level)"; "PAL_Growth_Stone_M"="Đá Tăng Trưởng Pal M (lên level)"; "PAL_Growth_Stone_L"="Đá Tăng Trưởng Pal L (lên level)"; "PAL_Growth_Stone_XL"="Đá Tăng Trưởng Pal XL (lên level)"
+ "ExpBoost_01"="Vật phẩm Tăng EXP Pal cấp 1 (ExpBoost)"; "ExpBoost_02"="Vật phẩm Tăng EXP Pal cấp 2 (ExpBoost)"; "ExpBoost_03"="Vật phẩm Tăng EXP Pal cấp 3 (ExpBoost)"; "ExpBoost_04"="Vật phẩm Tăng EXP Pal cấp 4 (ExpBoost)"
  "AncientTechnologyBook_G1"="Ancient Tech Manual (điểm KT cổ)"; "TechnologyBook_G1"="Technology Manual (điểm kỹ thuật)"; "TechnologyBook_G2"="Technology Manual II"; "TechnologyBook_G3"="Technology Manual III"
 }
 
@@ -109,6 +110,7 @@ $script:accBase = @{
  "Accessory_DFHP_1"="Nhẫn Phòng Thủ + Máu"; "Accessory_HCHP_1"="Nhẫn Cao Cấp: Máu"; "Accessory_HCMW_1"="Nhẫn Cao Cấp: Tải Trọng"; "Accessory_WKMC_1"="Nhẫn Cao Cấp: Làm Việc"; "Accessory_PPAT_1"="Nhẫn Tấn Công Pal +"; "Accessory_PPDF_1"="Silvegis Emblem (Phòng thủ +)"
  "Accessory_Nonkilling"="Nhẫn Không Giết (bắt Pal an toàn)"; "Accessory_NonkChecker_1"="Kính Xem Máu Pal (khi bắt)"; "Accessory_TalentChecker"="Kính Xem Chỉ Số Pal (IV)"
  "Accessory_Otomo_Fire_1"="Nhẫn Cường Hóa Pal hệ Lửa I"; "Accessory_Otomo_Fire_2"="Nhẫn Cường Hóa Pal hệ Lửa II"; "Accessory_Otomo_Water_1"="Nhẫn Cường Hóa Pal hệ Nước"; "Accessory_Otomo_Ice_1"="Nhẫn Cường Hóa Pal hệ Băng"; "Accessory_Otomo_Leaf_1"="Nhẫn Cường Hóa Pal hệ Cỏ"; "Accessory_Otomo_Earth_1"="Nhẫn Cường Hóa Pal hệ Đất"; "Accessory_Otomo_Electricity_1"="Nhẫn Cường Hóa Pal hệ Điện"; "Accessory_Otomo_Dark_1"="Nhẫn Cường Hóa Pal hệ Bóng Tối"; "Accessory_Otomo_Dargon_1"="Nhẫn Cường Hóa Pal hệ Rồng"
+ "Otomo_PalExp_Increase_1"="Nhẫn Tăng EXP Pal I"; "Otomo_PalExp_Increase_2"="Nhẫn Tăng EXP Pal II"; "Otomo_PalExp_Increase_3"="Nhẫn Tăng EXP Pal III"
  "ClawsPendant"="Dây Chuyền Móng Vuốt (Claws Pendant)"; "FangNecklace"="Dây Chuyền Nanh (Fang Necklace)"; "NightVisionGoggles"="Kính Nhìn Đêm (Night Vision Goggles)"
 }
 
@@ -178,7 +180,7 @@ function Get-Category($id) {
     if ($id -match 'Ore$' -or $id -match '^(Coal|Sulfur|Quartz|Sand|NightStone|Chromium|Charcoal|StainlessSteel|CrudeOil|Cement|CarbonFiber)$') { return "Quặng & Khoáng" }
     if ($id -match '^PalAwakening_Material') { return "Nguyên liệu Pal" }
     if ($id -match '^PalAwakening') { return "Đá Thức Tỉnh" }
-    if ($id -match '^PalUpgradeStone|^PAL_Growth_Stone|^Fruit_|^Rankup_|^AffectionFruit|^Elixir_|^Lotus_') { return "Nâng cấp Pal" }
+    if ($id -match '^PalUpgradeStone|^PAL_Growth_Stone|^Fruit_|^Rankup_|^AffectionFruit|^Elixir_|^Lotus_|^ExpBoost') { return "Nâng cấp Pal" }
     if ($id -match '^PalSphere|^KeySphere') { return "Cầu Pal" }
     if ($id -match '^WorkSuitability') { return "Sách kỹ năng" }
     if ($id -match '^(Diamond|Ruby|Sapphire|Eemerald)$') { return "Đá quý" }
